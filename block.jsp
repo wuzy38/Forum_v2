@@ -5,17 +5,17 @@
 <%-- 根据板块id获取当前板块所有帖子 --%>
 <%-- <%!
 
-ArrayList<Map<String, String>> getAllBlocks()
+ArrayList<HashMap<String, String>> getAllBlocks()
 {
     return new ArrayList<Map<String, String>>();
 }
 
-ArrayList<Map<String, String>> getBlock(int block_id)
+ArrayList<HashMap<String, String>> getBlock(int block_id)
 {
     return new ArrayList<Map<String, String>>();
 }
 
-ArrayList<Map<String, String>> getPostList(int block_id)
+ArrayList<HashMap<String, String>> getPostList(int block_id)
 {
     return new ArrayList<Map<String, String>>();
 }
