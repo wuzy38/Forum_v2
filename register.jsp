@@ -17,7 +17,6 @@ boolean LoginUser(String userName, String passWord, String submit_type)
     // 当前是注册还是登陆
     String submit_type = "sign_in";
     // 是否遇到登陆错误了
-    boolean lg_error;
     if (request.getMethod().equalsIgnoreCase("post"))
     {
         userName = request.getParameter("userName");
@@ -26,6 +25,8 @@ boolean LoginUser(String userName, String passWord, String submit_type)
         // 验证是否登陆成功
         if (LoginUser(userName, passWord, submit_type))
         {
+            // 设置socket 以及 cookie
+            
             // 跳转到index.jsp
             response.sendRedirect("index.jsp?userName="+userName);
         }
