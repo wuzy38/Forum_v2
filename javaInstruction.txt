@@ -11,3 +11,6 @@ GetUserData
 返回：ArrayList<HashMap<String, String>>，map的键位列名
 
 
+inUserName
+输入：username
+返回：boolean
