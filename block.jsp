@@ -1,16 +1,17 @@
-<%-- jsp传递block_id, sort_type, page --%>
-<%@ page contentType="text/html; charset=utf-8" %>
+<%-- jsp传递block_id, sort_type, page_id --%>
+<%@ page language="java" import="java.util.*,java.sql.*, com.*"
+contentType="text/html; charset=utf-8"%>
 <!-- 获取所有版块id和title -->
 <!-- 根据版块id获取当前版块信息Map -->
 <%-- 根据板块id获取当前板块所有帖子 --%>
 <%!
 
-int getIntVal(String key_str, int from, int to)
+int getIntVal(String key_str, String request_str, int from, int to)
 {
-    if (request.getParameter(str) != null)
+    if (request_str != null)
     {
-        String val_str = request.getParameter(str);
-        if (Integer.parseInt(val_str) >= from && Integer.parseInt(val_str) < to)
+        String val_str = request_str;
+        if (Integer.parseInt(val_str) >= from && Integer.parseInt(val_str) <= to)
         {
             return Integer.parseInt(val_str);
         }
@@ -18,45 +19,43 @@ int getIntVal(String key_str, int from, int to)
     return 1;
 }
 
-String getSortTypeStr(int sort_type)
+// 一页的帖子数
+int PageSize = 10;
+MysqlConnector conn = new MysqlConnector();
+ArrayList<HashMap<String, String>> getBlockList()
 {
-    if (sort_type == "")
-}
-
-ArrayList<HashMap<String, String>> getAllBlocks()
-{
-    return new ArrayList<HashMap<String, String>>();
-}
-
-ArrayList<HashMap<String, String>> getBlock(int block_id)
-{
-    return new ArrayList<HashMap<String, String>>();
+    
+    return conn.getTableData("plate");
 }
 
 ArrayList<HashMap<String, String>> getPostList(int block_id, int sort_type)
 {
-    return new ArrayList<HashMap<String, String>>();
+    return conn.getThemeInOrder(block_id, sort_type);
 }
+
+int getReplyCnt(ArrayList<HashMap<String, String>> post_list)
+{
+    int res = 0;
+    for (int i = 0; i < post_list.size(); i++)
+    {
+        res += Integer.parseInt(post_list.get(i).get("reply_cnt"));
+    }
+    return res;
+}
+
 %>
 <%
-    ArrayList<Map<String, String>> block_list = getAllBlocks();
-    int block_id = getIntVal("block_id", 1, block_list.size());
-    int sort_type = getIntVal("sort_type", 1, 3);
-    ArrayList<Map<String, String>> post_list = getPostList(block_id);
-    int page = getIntVal("page", );
-    if (request.getParameter("block_id") != null)
-    {
-        String block_id_str = request.getParameter("block_id");
-        if (Integer.parseInt(block_id_str) > 0 && Integer.parseInt(block_id_str) <= 10)
-        {
-            block_id = Integer.parseInt(block_id_str);
-        }
-    }
-    // Map<String, String> cur_block = getBlock(block_id)[0];
-    String block_str = "体育";
-    int main_post_cnt = 1240;
-    int reply_post_cnt = 126614;
-    String block_intro = "游泳是最好的运动";
+    ArrayList<HashMap<String, String>> block_list = getBlockList();
+    int block_id = getIntVal("block_id", request.getParameter("block_id"), 1, block_list.size());
+    int sort_type = getIntVal("sort_type", request.getParameter("sort_type"), 1, 3);
+    ArrayList<HashMap<String, String>> post_list = getPostList(block_id, sort_type);
+    int page_cnt = post_list.size() / PageSize + 1;
+    int page_id = getIntVal("page_id", request.getParameter("page_id"), 1, page_cnt);
+    HashMap<String, String> cur_block = block_list.get(block_id-1);
+    String block_str = cur_block.get("plate_name");
+    int main_post_cnt = Integer.parseInt(cur_block.get("theme_cnt")) ;
+    int reply_post_cnt = getReplyCnt(post_list);
+    String block_intro = cur_block.get("introduction");
     String block_open_time = "2019年6月1日";
 %>
 <html>
@@ -68,7 +67,7 @@ ArrayList<HashMap<String, String>> getPostList(int block_id, int sort_type)
         <%-- 导航条css模板 --%>
         <link rel="stylesheet" type="text/css" href="css/nav.css" />
         <style>
-            /* 导航条 当前界面为第一个 */
+            /* 导航条 当前界面为第2个 */
             .nav-content .nav-main ul li:nth-of-type(2) a
             {
                 border-bottom: 4px solid blue;
@@ -110,6 +109,10 @@ ArrayList<HashMap<String, String>> getPostList(int block_id, int sort_type)
             {
                 color: yellow;
             }
+            .left-subnav .block-list li.cur a
+            {
+                color: yellow;
+            }
             /* 正文 */
             .main-content
             {
@@ -118,6 +121,7 @@ ArrayList<HashMap<String, String>> getPostList(int block_id, int sort_type)
                 width: 700px;
                 /* height: 700px; */
             }
+            /* 板块信息 */
             .main-content .block-inf
             {
                 position: relative;
@@ -155,6 +159,7 @@ ArrayList<HashMap<String, String>> getPostList(int block_id, int sort_type)
             {
                 color: #666;
             }
+            /* 帖子部分 */
             .main-content .post-header
             {
                 background: #5993cc;
@@ -178,6 +183,7 @@ ArrayList<HashMap<String, String>> getPostList(int block_id, int sort_type)
                 height: 30px;
                 line-height: 30px;
                 color: whitesmoke;
+                text-decoration: none;
             }
             .main-content .post-header ul li.cur
             {
@@ -276,16 +282,47 @@ ArrayList<HashMap<String, String>> getPostList(int block_id, int sort_type)
             { 
                 text-decoration: none;
             }
+            .main-content .post-list .page-btns
+            {
+                text-align: right;
+                margin-top: 20px;
+                padding-right: 10px;
+            }
+            .main-content .post-list .page-btns button
+            {
+                padding: 5px 10px;
+            }
         </style>
         <script>
-            function clickUser()
+            block_id = "<%= block_id %>";
+            sort_type = "<%= sort_type %>";
+            page_id = "<%= page_id %>";
+            function clickBlock(i)
+            {
+                if (i == block_id) return;
+                // 重定向, 新的block
+                window.location.href="block.jsp?block_id="+i;
+            }
+            function clickSortType(i)
+            {
+                if (i == sort_type) return;
+                window.location.href="block.jsp?block_id="+block_id+"&sort_type="+i;
+            }
+            function clickNextPage()
             {
 
             }
+            function clickPrePage()
+            {
 
+            }
             function clickPost()
             {
                 
+            }
+            function clickUser()
+            {
+
             }
         </script>
     </head>
@@ -294,14 +331,16 @@ ArrayList<HashMap<String, String>> getPostList(int block_id, int sort_type)
         <%@ include file="jsp/nav.jsp"%>
         
         <div class="container">
+            <%-- 左导航条 --%>
             <div class="left-subnav">
                 <ul class="block-list">
-                    <% for (int i = 0; i < 100; i++) { %>
-                        <li><a href="block.jsp"> - my jsp index java </a></li>
+                    <% for (int i = 0; i < block_list.size(); i++) { %>
+                        <li class="<%= block_id==i+1?"cur":"" %>" ><a href="JavaScript:clickBlock(<%= i+1 %>)"> - <%= block_list.get(i).get("plate_name") %> </a></li>
                     <% } %>
                 </ul>
             </div>
             <div class="main-content">
+                <%-- 板块信息 --%>
                 <div class="block-inf">
                     <div class="header-line"> 
                         <div class="block-name"> 
@@ -323,10 +362,10 @@ ArrayList<HashMap<String, String>> getPostList(int block_id, int sort_type)
                 </div>
                 <div class="post-header">
                     <ul>
-                        <li class="cur"> <a> 默认 </a> </li>
-                        <li> <a> 最新 </a> </li>
-                        <li> <a> 最热 </a> </li>
-                        <li class="post"> <button> 发帖 </button></li>
+                        <li class="<%= sort_type==1?"cur":"" %>"> <a href="JavaScript:clickSortType(1)"> 默认 </a> </li>
+                        <li class="<%= sort_type==2?"cur":"" %>"> <a href="JavaScript:clickSortType(2)"> 最新 </a> </li>
+                        <li class="<%= sort_type==3?"cur":"" %>"> <a href="JavaScript:clickSortType(3)"> 最热 </a> </li>
+                        <li class="post"> <button onclick="clickPost()"> 发帖 </button></li>
                     </ul>
                 </div>
                 <div class="post-list">
@@ -338,16 +377,21 @@ ArrayList<HashMap<String, String>> getPostList(int block_id, int sort_type)
                             <th class="reply"> 回复 </th>
                             <th class="time"> 发表时间 </th>
                         </tr>
-                        <% for (int i = 0; i < 200; i++) { %>
+                        <% for (int i = (page_id-1) * PageSize; i < post_list.size() && i < page_id*PageSize; i++) { %>
                             <tr>
-                                <td class="title"> <a href="JavaScript:clickPost()">标题是很长很长的，宽度需要很大的哎哎哎</a> </td>
-                                <td class="author"> <a href="JavaScript:clickUser()">作者也可能比较长</a> </td>
-                                <td class="click"> 1254932 </td>
-                                <td class="reply"> 12532 </td>
-                                <td class="time"> 2019.06.05 </td>
+                                <td class="title"> <a href="JavaScript:clickPost()"> <%=post_list.get(i).get("theme_name")%> </a> </td>
+                                <td class="author"> <a href="JavaScript:clickUser()"> <%=post_list.get(i).get("user_id")%> </a> </td>
+                                <td class="click"> <%= post_list.get(i).get("click_num") %> </td>
+                                <td class="reply"> <%= post_list.get(i).get("reply_cnt") %> </td>
+                                <td class="time"> <%= post_list.get(i).get("theme_time") %> </td>
                             </tr>
                         <% } %>
                     </table>
+                    <div class="page-btns">
+                        <%= page_id %> / <%= page_cnt %>
+                        <button <%= page_id==1?"disabled":"" %> > 上一页 </button>
+                        <button <%= post_list.size() < page_id * PageSize ? "disabled":""%> > 下一页 </button>
+                    </div>
                 </div>
             </div>
         </div>
