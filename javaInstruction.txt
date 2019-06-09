@@ -1,7 +1,7 @@
 MysqlConnector.class
 
-¹¹Ôìº¯Êı¿Õ£¬
-checkPassword½Ó¿Ú£¬ÊäÈëuserºÍpassword£¬·µ»Øboolean
+æ„é€ å‡½æ•°ç©ºï¼Œ
+checkPasswordæ¥å£ï¼Œè¾“å…¥userå’Œpasswordï¼Œè¿”å›boolean
 
 
 
