@@ -1,33 +1,34 @@
-添加用户
+﻿添加用户
 输入：user和password
 返回: 无
 
 
-
-获取所有版块id和名字
+获取所有版块id和名字 xxxx
 输入：无
 返回: ArrayList<HashMap<String, String>>
 
+--------------
+getRowByID(String table_name, int id)
 根据版块id获取当前版块所有信息
 输入：id
 返回: HashMap<String, String>
+
+根据帖子id, 获取帖子内容
+输入: id
+返回: HashMap<String, String>
+--------------
 
 根据板块id, 排序方式;获取当前板块指定帖子
 输入: id, sort_type
 // sort_type取值, 1按最新回复时间排序, 2按最新发表时间, 3按回复数量排序
 返回：ArrayList<HashMap<String, String>>
-
+------------------
 
 
 给定时间间隔内, 按点击数量排序的帖子
 输入: days, hours
 返回: ArrayList<HashMap<String, String>>
 
-
-
-根据帖子id, 获取帖子内容
-输入: id
-返回: HashMap<String, String>
 
 根据帖子id, 帖子的所有回复
 输入: id

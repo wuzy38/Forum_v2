@@ -13,3 +13,37 @@ getTableData
 inUserName
 输入：username
 返回：boolean
+
+
+boolean addUser(String user, String password) 
+添加用户
+输入：user和password
+返回: boolean表示是否成功
+
+boolean addTheme(String theme_name, int plate_id, int user_id)
+添加主题
+输入：主题名theme_name, 所属板块id plate_id, 发起人id user_id
+返回：boolean 表示是否成功
+
+addReply(int user_id, String content, int theme_id)
+添加回复
+输入：回复人id user_id, 回复内容content， 所属主题id theme_id
+返回：boolean 表示是否成功
+
+
+根据table和id获取所有信息getRowByID(String table_name, int id)
+输入：表名、id
+返回: HashMap<String, String>
+
+根据板块id, 排序方式;获取当前板块指定帖子
+getThemeInOrder(int plate_id, int sort_type)
+输入:plate_id,  排序方式
+ArrayList<HashMap<String, String>>
+
+ArrayList<HashMap<String, String>> getReplyByThemeID(int theme_id)
+根据帖子id, 帖子的所有回复
+输入: theme_id
+返回: ArrayList<HashMap<String, String>>
+
+
+

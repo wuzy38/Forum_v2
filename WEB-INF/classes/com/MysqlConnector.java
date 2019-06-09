@@ -1,62 +1,270 @@
+package com;
 import java.util.*;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 import java.sql.*;
-// package com;
+// 
 
 public class MysqlConnector {
-    // private connStr;
     private Connection con;
-    private Statement stmt;
-
+    
     public static void main(String[] args) {
-        System.out.println(111);
         MysqlConnector test = new MysqlConnector();
-        System.out.println(test.checkPassword("user_name999", "password999"));
+//        System.out.println(test.inUserName("user_name999"));
+//        System.out.println(test.checkPassword("user_name999", "password999"));
+//        ArrayList<HashMap<String, String>> res = test.getTableData("user");
+//        for(int i = 0 ; i < res.size() ; i++) {
+//        	System.out.println(res.get(i).get("user_name"));
+//        }
+
+        List< HashMap<String, String>> a = test.getThemeInOrder(1, 2);
+        for(int i = 0 ; i < a.size(); i++) {
+        	HashMap<String, String> hm = a.get(i);
+        	Iterator<String> it = hm.keySet().iterator();
+            while(it.hasNext()) { // ÎŞĞò±éÀú
+    	        String key = it.next();
+    	        String value = hm.get(key); // ¸ù¾İ¼üÖµÈ¡³öÖµ
+    	        System.out.print(value + " ");
+            }
+            System.out.println();
+        }
+        
     }
 
     public MysqlConnector() {
-        String connStr = "jdbc:mysql://localhost:3306/forum?serverTimezone=GMT"
+        String connStr = "jdbc:mysql://172.18.35.138:3306/forum?serverTimezone=GMT"
                 + "&useUnicode=true&characterEncoding=utf-8";
-
+        
         con = null;
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver"); // æ•°æ®åº“é©±åŠ¨
+            Class.forName("com.mysql.cj.jdbc.Driver"); // Êı¾İ¿âÇı¶¯
             con = DriverManager.getConnection(connStr, "root", "88720073");
         } catch (Exception e) {
             String msg = e.getMessage();
-            // out.write(msg);
             System.out.println(msg);
         }
     }
 
     public boolean checkPassword(String user, String password) {
-        // stmt = con.createStatement(); //åˆ›å»ºmysqlå¯¹è±¡
-        try {
+        try{
             String table = "";
             String sql = "select * from user where user_name = ?";
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, user);
             ResultSet result = ps.executeQuery();
-            while (result.next()) { // cuscorç§»åˆ°ä¸‹ä¸€ä¸ªè®°å½•
-                table = result.getString("user_password"); // å¦‚æœè¿˜æœ‰è®°å½•ï¼Œå°±å¾—åˆ°æ•°æ®
-                if (table == password) {
+            while (result.next()) {
+                table = result.getString("user_password");
+                if (table.equals(password) ) {
                     return true;
                 }
             }
             result.close();
-            con.close();
-
-        } catch (Exception e) {
+        } catch(Exception e){
             String msg = e.getMessage();
-            // out.write(msg);
-            System.out.println(msg);
+            System.out.println("checkpasswordExp:" + msg);
         }
-        return false;
-
+        return false;   
     }
-
-    // public GetUserData(){
-    // }
-    // public Get
-
-
+    
+    public boolean inUserName(String user_name) {
+    	try{
+            String sql = "select * from user where user_name = ?";
+            PreparedStatement pstm = con.prepareStatement(sql);
+            pstm.setString(1, user_name);
+            ResultSet result = pstm.executeQuery();
+            if(result.next())
+            	return true;
+            result.close();
+        } catch(Exception e){
+            String msg = e.getMessage();
+            System.out.println("inUserNameExp:" + msg);
+        }
+        return false;  
+    }
+    
+    public ArrayList<HashMap<String, String>> getTableData(String tableName){
+    	ArrayList<HashMap<String, String>> result = new ArrayList<HashMap<String, String>>();
+    	try {
+    		PreparedStatement pstm = con.prepareStatement("select * from " + tableName);
+    		ResultSet rs = pstm.executeQuery();
+    		result = convertToList(rs);
+    	} catch(Exception e) {
+    		String msg = e.getMessage();
+    		System.out.println(msg);
+    	}
+    	return result;
+    }
+    
+    public boolean addUser(String user, String password) {
+    	// test
+    	int num = 0;
+    	try{
+            String sql = "SELECT max(*) FROM user.user_id";
+            PreparedStatement pstm = con.prepareStatement(sql);
+            ResultSet result = pstm.executeQuery();
+            if(result.next())
+            	num = result.getInt(1) + 1;
+            result.close();
+            sql = "insert into user(user_id, user_name, register_time, grade, user_password, photo)" 
+            		+ "values(?, ?, ?, 0, ?, ?)";
+            pstm = con.prepareStatement(sql);
+            pstm.setInt(1, num);
+            pstm.setString(2, user);
+            String time_str = getTimeString();
+            pstm.setString(3, time_str);
+            pstm.setString(4, password);
+            pstm.setString(5, "default.jpg");
+            int influcenced_row = pstm.executeUpdate();
+            if(influcenced_row > 0) return true;
+        } catch(Exception e) {
+        	String msg = e.getMessage();
+        	System.out.println(msg);
+        }
+    	return false;
+    }
+    
+    public boolean addTheme(String theme_name, int plate_id, int user_id) {
+    	// test
+    	try {
+    		int num = 0;
+    		String sql = "select max(theme_id) from theme";
+    		PreparedStatement pstm = con.prepareStatement(sql);
+            ResultSet result = pstm.executeQuery();
+            if(result.next())
+            	num = result.getInt(1) + 1;
+            result.close();
+            sql = "insert into theme(theme_id, theme_name, theme_time, plate_id, user_id"
+            		+ "click_num, newest_reply, reply_cnt, themecol) VALUES"
+            		+ "(?, ?, ?, ?, ?, ? , ?, ?, ?)";
+            pstm = con.prepareStatement(sql);
+            pstm.setInt(1, num);
+            pstm.setString(2, theme_name);
+            pstm.setString(3, getTimeString());
+            pstm.setInt(4, plate_id);
+            pstm.setInt(5, user_id);
+            pstm.setInt(6, 0);
+            pstm.setString(7, getTimeString());
+            pstm.setInt(8, 0);
+            pstm.setString(9, "");
+            int influcenced_row = pstm.executeUpdate();
+            if(influcenced_row > 0) return true;
+    	}catch(Exception e) {
+    		String msg = e.getMessage();
+    		System.out.println(msg);
+    	}
+    	return false;
+    }
+    
+    public boolean addReply(int user_id, String content, int theme_id) {
+    	// test
+    	try {
+    		int num = 0;
+    		String sql = "select max(reply_id) from reply";
+    		PreparedStatement pstm = con.prepareStatement(sql);
+            ResultSet result = pstm.executeQuery();
+            if(result.next())
+            	num = result.getInt(1) + 1;
+            result.close();
+            sql = "insert into reply(reply_id, user_id, content, reply_time, theme_id) VALUES"
+            		+ "(?, ?, ?, ?, ?)";
+            pstm = con.prepareStatement(sql);
+            pstm.setInt(1, num);
+            pstm.setInt(2, user_id);
+            pstm.setString(3, content);
+            pstm.setString(4, getTimeString());
+            pstm.setInt(5, theme_id);
+            int influcenced_row = pstm.executeUpdate();
+            if(influcenced_row > 0) return true;
+    	}catch(Exception e) {
+    		String msg = e.getMessage();
+    		System.out.println(msg);
+    	}
+    	return false;
+    }
+    
+    public HashMap<String, String> getRowByID(String table_name, int id){
+    	// test
+    	HashMap<String, String> res = new HashMap<String, String>();
+    	ArrayList<HashMap<String, String>> result = new ArrayList<HashMap<String, String>>();
+    	try {
+    		PreparedStatement pstm = con.prepareStatement("select * from "+ table_name 
+    						+  " where " + table_name + "_id = ?");
+    		pstm.setInt(1, id);
+    		ResultSet rs = pstm.executeQuery();
+    		result = convertToList(rs);
+    		if(result.size() > 0) {
+    			res = result.get(0);
+    		}
+    	} catch(Exception e) {
+    		String msg = e.getMessage();
+    		System.out.println(msg);
+    	}
+    	return res;
+    }
+     
+    public ArrayList<HashMap<String, String>> getThemeInOrder(int plate_id, int sort_type){
+    	String order = "newest_reply desc";
+    	if(sort_type == 1) {
+    		order = "newest_reply desc";
+    	}
+    	if(sort_type == 2) {
+    		order = "theme_time desc";
+    	}
+    	if(sort_type == 3) {
+    		order = "reply_cnt desc";
+    	}
+    	ArrayList<HashMap<String, String>> result = new ArrayList<HashMap<String, String>>();
+    	try {
+    		String sql = "select * from theme where plate_id = ? order by "+ order;
+    		PreparedStatement pstm = con.prepareStatement(sql);
+    		pstm.setInt(1, plate_id);
+    		ResultSet rs = pstm.executeQuery();
+    		result = convertToList(rs);
+    	} catch(Exception e) {
+    		String msg = e.getMessage();
+    		System.out.println(msg);
+    	}
+    	return result;
+    }
+    
+    public ArrayList<HashMap<String, String>> getReplyByThemeID(int theme_id){
+    	ArrayList<HashMap<String, String>> result = new ArrayList<HashMap<String, String>>();
+    	try {
+    		String sql = "select * from reply where theme_id = ?";
+    		PreparedStatement pstm = con.prepareStatement(sql);
+    		pstm.setInt(1, theme_id);
+    		ResultSet rs = pstm.executeQuery();
+    		result = convertToList(rs);
+    	}catch(Exception e) {
+    		String msg = e.getMessage();
+    		System.out.println(msg);
+    	}
+    	return result;
+    }
+    
+    private String getTimeString() {
+    	Date date = new Date(); 
+        Timestamp time = new Timestamp(date.getTime());
+        String time_str = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(time);
+        return time_str;
+    }
+    
+    private static ArrayList<HashMap<String, String>> convertToList(ResultSet rs) throws Exception {
+    	ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+    	ResultSetMetaData md = rs.getMetaData(); // »ñÈ¡¼üÃû
+    	int columnCount = md.getColumnCount();// ÁĞÊıÁ¿
+    	while (rs.next()) {
+    		HashMap<String, String> rowData = new HashMap<String, String>();// ÉùÃ÷Map
+    		for (int i = 1; i <= columnCount; i++) {
+    			rowData.put(md.getColumnName(i), rs.getString(i));// »ñÈ¡¼üÃû¼°Öµ
+    		}
+    		list.add(rowData);
+    	}
+    	return list;
+    }
+    
+    
+    
+    
+    
 }
