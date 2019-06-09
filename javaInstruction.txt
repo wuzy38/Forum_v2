@@ -1,0 +1,7 @@
+MysqlConnector.class
+
+构造函数空，
+checkPassword接口，输入user和password，返回boolean
+
+
+
