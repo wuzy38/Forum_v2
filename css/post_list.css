@@ -1,0 +1,77 @@
+.post-list
+{
+    width: 700px;
+}
+.post-list table
+{
+    width: 100%;
+    /* 指定固定宽度 */
+    table-layout: fixed;
+    /* 表格间距 */
+    border-spacing: 0;
+}
+.post-list table tr.header
+{
+    background: #ddd;
+    height: 25px;
+}
+.post-list table tr.item
+{
+    height: 40px;
+}
+.post-list table tr:nth-of-type(2n+3)
+{
+    background: #f8f8f8;
+}
+.post-list table tr.header th
+{
+    text-align: left;
+    overflow: hidden;
+    padding: 0;
+}
+.post-list table tr td
+{
+    text-align: left;
+    overflow: hidden;
+    padding: 0;
+}
+.post-list table tr.header th.title { width: 400px; }
+.post-list table tr.header th.author { width: 120px; }
+.post-list table tr.header th.click { width: 50px; }
+.post-list table tr.header th.reply { width: 50px; }
+.post-list table tr.header th.time { width: 80px; }
+.post-list table tr.item td.title 
+{ 
+    width: 400px; 
+}
+.post-list table tr.item td.author 
+{ 
+    width: 120px;
+    font-size: 14px;
+}
+.post-list table tr.item td.click 
+{ 
+    width: 50px;
+    color: #777;
+    font-size: 12px;
+}
+.post-list table tr.item td.reply
+{ 
+    width: 50px;
+    color: #777;
+    font-size: 12px;
+}
+.post-list table tr.item td.time 
+{ 
+    width: 80px; 
+    color: #777;
+    font-size: 12px;
+}
+.post-list table tr.item td.title a
+{ 
+    text-decoration: none;
+}
+.post-list table tr.item td.author a
+{ 
+    text-decoration: none;
+}

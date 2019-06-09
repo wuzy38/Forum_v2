@@ -1,0 +1,119 @@
+/* 导航条 */
+.nav-bar
+{
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    z-index: 999;
+    width: 100%;
+    height: 48px;
+    border-top: 2px solid blue;
+    background: rgba(255, 255, 255, 0.95);
+}
+.nav-content
+{
+    position: relative;
+    width: 1000px;
+    height: 48px;
+    margin: 0 auto;
+}
+.nav-content .nav-logo
+{
+    float: left;
+    position: relative;
+    width: 200px;
+}
+.nav-content .nav-logo #title-text
+{
+    margin: 0;
+    font-family: "宋体";
+    text-align: center;
+    color:mediumblue;
+    width: 200px;
+    height: 48px; 
+    line-height: 48px;
+}
+.nav-content .nav-main
+{
+    position: relative;
+    float: left;
+    height: 48px;
+    width: 400px;
+    margin: 0;
+}
+.nav-content .nav-main ul
+{
+    margin: 0;
+    position: relative;
+    float: left;
+}
+.nav-content .nav-main ul li
+{
+    list-style-type: none;
+    display: inline-block;
+    height: 48px;
+}
+.nav-content .nav-main ul li a
+{
+    display: inline-block;
+    text-align: center;
+    height: 36px;
+    line-height: 36px;
+    margin: 0 5px;
+    padding: 6px 10px 2px 10px;
+    color: #888;
+    text-decoration: none;
+}
+.nav-content .nav-main ul li .cur-page
+{
+    border-bottom: 4px solid blue;
+    color: #000;
+}
+.nav-content .nav-main .search-bar
+{
+    border: 1px solid #888;
+    border-radius: 5px;
+    background-color: #f0f0f0;
+    width: 300px;
+    height: 36px;
+    margin: 5px 0 5px 250px;
+}
+.nav-content .nav-main .search-bar .search-bar-input
+{
+    float: left;
+    height: 30px;
+    margin: 3px 15px;
+}
+.nav-content .nav-main .search-bar .search-bar-input input
+{
+    border: none;
+    height: 30px;
+    width: 250px;
+    background-color: #f0f0f0;
+}
+.nav-content .nav-main .search-bar .search-bar-btn
+{
+    margin-left: 270px;
+    margin-top: 3px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+}
+.nav-content .nav-main .search-bar .search-bar-btn a
+{
+    height: 30px;
+    line-height: 30px;
+}
+.nav-content .nav-user
+{
+    float: right;
+}
+.nav-content .nav-user button
+{
+    width: 36px;
+    height: 36px;
+    border-radius: 18px;
+    border: none;
+    margin: 6px 0;
+    padding: 0;
+}
