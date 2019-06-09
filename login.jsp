@@ -62,6 +62,9 @@ boolean LoginUser(String userName, String passWord, String submit_type)
 
 <html>
     <head>
+        <script>
+
+        </script>
         <title> Forum Login </title>
         <link rel="stylesheet" type="text/css" href="css/font-awesome.css" />
         <link rel="stylesheet" type="text/css" href="css/nav.css" />
@@ -217,7 +220,7 @@ boolean LoginUser(String userName, String passWord, String submit_type)
                     user_tip.setAttribute("class", "form-tips tips-error");
                     return false;
                 }
-                var password = document.getElementById("#sign_up passWord");
+                var password = document.getElementById("#sign_up #passWord");
                 if (password.value.length != 6 || isNaN(password.value))
                 {
                     let pwd_tip = document.querySelector("#sign_up #passWord_tips");
@@ -231,7 +234,7 @@ boolean LoginUser(String userName, String passWord, String submit_type)
             function onLgSubmit()
             {
                 var username = document.querySelector("#sign_in #userName");
-                var password = document.getElementById("#sign_in passWord");
+                var password = document.getElementById("#sign_in #passWord");
                 if (username.value.length < 6 || username.value.length > 10
                 || password.value.length != 6 || isNaN(password.value))
                 {
@@ -245,7 +248,7 @@ boolean LoginUser(String userName, String passWord, String submit_type)
             {
                 onRgtSel();
                 var userName = document.querySelector("#sign_up #userName");
-                var passWord = document.getElementById("#sign_up passWord");
+                var passWord = document.querySelector("#sign_up #passWord");
                 userName.value = "<%= userName %>";
                 passWord.value = "<%= passWord %>";
                 var user_tip = document.querySelector("#sign_up #userName_tips");
@@ -256,8 +259,8 @@ boolean LoginUser(String userName, String passWord, String submit_type)
             function onLgError()
             {
                 onLgSel();
-                var userName = document.querySelector("#sign_up #userName");
-                var passWord = document.getElementById("#sign_up passWord");
+                var userName = document.querySelector("#sign_in #userName");
+                var passWord = document.querySelector("#sign_in #passWord");
                 userName.value = "<%= userName %>";
                 passWord.value = "<%= passWord %>";
                 alert("用户名或密码错误");
@@ -282,7 +285,7 @@ boolean LoginUser(String userName, String passWord, String submit_type)
             </div>
             <%-- 注册界面 --%>
             <div class="form-wrapper" id="sign_up" style="display:unset">
-                <form action="register.jsp" method="post">
+                <form action="login.jsp" method="post">
                     <input type="hidden" name="submit_type" value="sign_up">
                     <div class="form-item">
                         <label class="form-label" for="userName">
@@ -312,7 +315,7 @@ boolean LoginUser(String userName, String passWord, String submit_type)
             </div>
             <%-- 登录界面 --%>
             <div class="form-wrapper" id="sign_in" style="display: none">
-                <form action="register.jsp" method="post">
+                <form action="login.jsp" method="post">
                     <input type="hidden" name="submit_type" value="sign_in">
                     <div class="form-item">
                         <label class="form-label" for="userName">
@@ -341,7 +344,7 @@ boolean LoginUser(String userName, String passWord, String submit_type)
             </div>
 
         </div>
-        <%-- 针对注册登录错误 --%>
+        <%-- 处理注册登录错误 --%>
         <script>
             // 注册错误
             <% if (request.getMethod().equalsIgnoreCase("post") && submit_type.equals("sign_up")) { %>
