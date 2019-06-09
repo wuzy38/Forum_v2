@@ -6,10 +6,9 @@ checkPassword
 输入：user和password
 返回：boolean
 
-GetUserData
-输入：无
-返回：ArrayList<HashMap<String, String>>，map的键位列名
-
+getTableData
+输入：表名table
+返回：ArrayList<HashMap<String, String>>
 
 inUserName
 输入：username
