@@ -1,28 +1,49 @@
-<%-- jsp传递block_id --%>
+<%-- jsp传递block_id, sort_type, page --%>
 <%@ page contentType="text/html; charset=utf-8" %>
 <!-- 获取所有版块id和title -->
 <!-- 根据版块id获取当前版块信息Map -->
 <%-- 根据板块id获取当前板块所有帖子 --%>
-<%-- <%!
+<%!
+
+int getIntVal(String key_str, int from, int to)
+{
+    if (request.getParameter(str) != null)
+    {
+        String val_str = request.getParameter(str);
+        if (Integer.parseInt(val_str) >= from && Integer.parseInt(val_str) < to)
+        {
+            return Integer.parseInt(val_str);
+        }
+    }
+    return 1;
+}
+
+String getSortTypeStr(int sort_type)
+{
+    if (sort_type == "")
+}
 
 ArrayList<HashMap<String, String>> getAllBlocks()
 {
-    return new ArrayList<Map<String, String>>();
+    return new ArrayList<HashMap<String, String>>();
 }
 
 ArrayList<HashMap<String, String>> getBlock(int block_id)
 {
-    return new ArrayList<Map<String, String>>();
+    return new ArrayList<HashMap<String, String>>();
 }
 
-ArrayList<HashMap<String, String>> getPostList(int block_id)
+ArrayList<HashMap<String, String>> getPostList(int block_id, int sort_type)
 {
-    return new ArrayList<Map<String, String>>();
+    return new ArrayList<HashMap<String, String>>();
 }
-%> --%>
+%>
 <%
-    // ArrayList<Map<String, String>> blockList = getAllBlocks();
-    int block_id = 1;
+    ArrayList<Map<String, String>> block_list = getAllBlocks();
+    int block_id = getIntVal("block_id", 1, block_list.size());
+    int sort_type = getIntVal("sort_type", 1, 3);
+    ArrayList<Map<String, String>> post_list = getPostList(block_id);
+    int page = getIntVal("page", );
     if (request.getParameter("block_id") != null)
     {
         String block_id_str = request.getParameter("block_id");
