@@ -16,7 +16,6 @@ public class MysqlConnector {
     public MysqlConnector() {
         String connStr = "jdbc:mysql://localhost:3306/forum?serverTimezone=GMT"
                 + "&useUnicode=true&characterEncoding=utf-8";
-        
 
         con = null;
         try {
@@ -31,7 +30,7 @@ public class MysqlConnector {
 
     public boolean checkPassword(String user, String password) {
         // stmt = con.createStatement(); //创建mysql对象
-        try{
+        try {
             String table = "";
             String sql = "select * from user where user_name = ?";
             PreparedStatement ps = con.prepareStatement(sql);
@@ -45,31 +44,19 @@ public class MysqlConnector {
             }
             result.close();
             con.close();
-            
-        } catch(Exception e){
+
+        } catch (Exception e) {
             String msg = e.getMessage();
             // out.write(msg);
             System.out.println(msg);
         }
         return false;
-        
+
     }
 
     // public GetUserData(){
     // }
     // public Get
-    private static List convertList(ResultSet rs) throws SQLException{
-        List list = new ArrayList();
-        ResultSetMetaData md = rs.getMetaData();//获取键名
-        int columnCount = md.getColumnCount();//获取行的数量
-        while (rs.next()) {
-        Map rowData = new HashMap();//声明Map
-        for (int i = 1; i <= columnCount; i++) {
-        rowData.put(md.getColumnName(i), rs.getObject(i));//获取键名及值
-        }
-        list.add(rowData);
-        }
-        return list;
-    }
+
 
 }
