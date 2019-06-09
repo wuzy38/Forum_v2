@@ -1,7 +1,13 @@
 MysqlConnector.class
 
-构造函数空，
-checkPassword接口，输入user和password，返回boolean
+构造函数空
 
+checkPassword
+输入：user和password
+返回：boolean
+
+GetUserData
+输入：无
+返回：ArrayList<HashMap<String, String>>，map的键位列名
 
 
