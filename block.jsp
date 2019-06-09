@@ -1,5 +1,5 @@
 <%-- jsp传递block_id --%>
-<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ page contentType="text/html; charset=utf-8" %>
 <!-- 获取所有版块id和title -->
 <!-- 根据版块id获取当前版块信息Map -->
 <%-- 根据板块id获取当前板块所有帖子 --%>

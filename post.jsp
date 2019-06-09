@@ -1,5 +1,5 @@
 <%-- jsp传递block_id和post_id --%>
-<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ page contentType="text/html; charset=utf-8" %>
 <%-- 根据帖子id获取当前帖子的信息 --%>
 <%-- 根据帖子id获取所有回复 --%>
 <%
@@ -28,7 +28,6 @@ for (int i = 0; i < 10; i++) post_content += "  sagsdoinshds \n";
                 margin: 50px auto;
                 width: 800px;
             }
-
             .container .header
             {
                 /* padding-top: 30px; */

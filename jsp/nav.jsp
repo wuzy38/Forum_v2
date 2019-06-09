@@ -1,4 +1,4 @@
-<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ page contentType="text/html; charset=utf-8" %>
 <!-- 导航条 -->
 <div class="nav-bar">
     <div class="nav-content">

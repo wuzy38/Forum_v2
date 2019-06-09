@@ -1,4 +1,5 @@
-<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ page language="java" import="java.util.*,java.sql.*, com.*"
+contentType="text/html; charset=utf-8"%>
 <%-- java 方法 --%>
 <%! 
 // 登陆用户  
@@ -6,11 +7,36 @@
 // 2. 登陆( submit_type="sign_in")->验证用户名和密码是否正确
 boolean LoginUser(String userName, String passWord, String submit_type) 
 {
-    return true;
+    MysqlConnector conn = new MysqlConnector();
+    if (submit_type.equals("sign_up"))
+    {
+        if (conn.inUserName(userName))
+        {
+            return false;
+        }
+        else 
+        {
+            // 添加用户
+            return true;
+        }
+    }
+    else if (submit_type.equals("sign_in"))
+    {
+        return conn.checkPassword(userName, passWord);
+    }
+    else 
+    {
+        return false;
+    }
 }
 %>
 
 <% 
+    if (session.getAttribute("userName") != null)
+    {
+        // 重定向->跳转到index.jsp
+        response.sendRedirect("index.jsp");
+    }
     request.setCharacterEncoding("UTF-8");
     String userName = "";
     String passWord = "";
@@ -25,30 +51,17 @@ boolean LoginUser(String userName, String passWord, String submit_type)
         // 验证是否登陆成功
         if (LoginUser(userName, passWord, submit_type))
         {
-            // 设置socket 以及 cookie
-            
-            // 跳转到index.jsp
+            // 设置session
+            session.setAttribute("userName", userName);
+            // 重定向->跳转到index.jsp
             response.sendRedirect("index.jsp?userName="+userName);
         }
-        else if (submit_type.equals("sign_in"))
-        {
-            // 登陆错误 -> 用户名或密码错误
-        }
-        else if (submit_type.equals("sign_up"))
-        {
-            // 注册错误 -> 用户名重复
-        }
+        // else 注册登录错误 -> js处理
     }
 %>
+
 <html>
     <head>
-        <script>
-            <% if (request.getMethod().equalsIgnoreCase("post")) { %>
-                alert("username");
-                alert("<%= "kawayi" %>");
-            <% } %>
-            
-        </script>
         <title> Forum Login </title>
         <link rel="stylesheet" type="text/css" href="css/font-awesome.css" />
         <link rel="stylesheet" type="text/css" href="css/nav.css" />
@@ -214,9 +227,18 @@ boolean LoginUser(String userName, String passWord, String submit_type)
                 }
                 return true;
             }
+            // 点击登录
             function onLgSubmit()
             {
-
+                var username = document.querySelector("#sign_in #userName");
+                var password = document.getElementById("#sign_in passWord");
+                if (username.value.length < 6 || username.value.length > 10
+                || password.value.length != 6 || isNaN(password.value))
+                {
+                    alert("用户名或密码错误");
+                    return false;
+                }
+                return true;
             }
             // 注册失败
             function onRgtError()
