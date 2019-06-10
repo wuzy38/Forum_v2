@@ -10,15 +10,7 @@ boolean LoginUser(String userName, String passWord, String submit_type)
     MysqlConnector conn = new MysqlConnector();
     if (submit_type.equals("sign_up"))
     {
-        if (conn.inUserName(userName))
-        {
-            return false;
-        }
-        else 
-        {
-            // 添加用户
-            return true;
-        }
+        return conn.addUser(userName, passWord);
     }
     else if (submit_type.equals("sign_in"))
     {
