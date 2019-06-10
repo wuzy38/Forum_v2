@@ -24,6 +24,7 @@ boolean LoginUser(String userName, String passWord, String submit_type)
 %>
 
 <% 
+    System.out.println("login test");
     if (session.getAttribute("userName") != null)
     {
         // 重定向->跳转到index.jsp

@@ -1,17 +1,80 @@
-<%-- jsp传递block_id和post_id --%>
+<%-- jsp传递block_id和post_id reply_content --%>
 <%@ page contentType="text/html; charset=utf-8" %>
 <%-- 根据帖子id获取当前帖子的信息 --%>
 <%-- 根据帖子id获取所有回复 --%>
+
+<%!
+int getIntVal(String key_str, String request_str, int from, int to)
+{
+    if (request_str != null)
+    {
+        String val_str = request_str;
+        if (Integer.parseInt(val_str) >= from && Integer.parseInt(val_str) <= to)
+        {
+            return Integer.parseInt(val_str);
+        }
+    }
+    return 1;
+}
+MysqlConnector conn = new MysqlConnector();
+ArrayList<HashMap<String, String>> getBlockList()
+{
+    
+    return conn.getTableData("plate");
+}
+
+ArrayList<HashMap<String, String>> getPostList()
+{
+    return conn.getTableData("theme");
+}
+
+ArrayList<HashMap<String, String>> getReplyList(int post_id)
+{
+    return conn.getReplyByTheme(post_id);
+}
+
+String getUserName(String user_id)
+{
+    return conn.getRowById("user", Integer.parseInt(user_id) ).get("user_name");
+}
+
+int getUserIdByName(String user_name)
+{
+
+}
+
+%>
+
 <%
-int block_id = 1;
-String block_str = "体育";
-String post_title = "自由泳长一点的标题";
-String post_author = "bibi";
-String post_time = "2019/06/06 0:25";
-int click_cnt = 15;
-int reply_cnt = 12;
-String post_content = "这哇塞了的供sdgsdghf阿反驳日本d货商的合格率是的会更好来干哈省略号市工会哦哦核苷酸读后感的搜狐给的搜";
-for (int i = 0; i < 10; i++) post_content += "  sagsdoinshds \n";
+ArrayList<HashMap<String, String>> block_list = getBlockList();
+ArrayList<HashMap<String, String>> post_list = getPostList();
+int block_id = getIntVal("block_id", request.getParameter("block_id"), 1, block_list.size());
+String block_name = block_list.get(block_id-1).get("plate_name");
+int post_id = getIntVal("post_id", request.getParameter("post_id"), 1, post_list.size());
+if (session.getAttribute("userName") != null && request.getParameter("reply_content") != null)
+{
+    addReply(getUserIdByName(session.getAttribute("userName")), reply_content, post_id);
+    post_list = getPostList();
+}
+HashMap<String, String> cur_post = post_list.get(post_id-1);
+String post_title = cur_post.get("theme_name");
+String post_author = getUserName(cur_post.get("user_id"));
+String post_time = cur_post.get("theme_time");
+int click_cnt = Integer.parseInt(cur_post.get("click_num"));
+int reply_cnt = Integer.parseInt(cur_post.get("reply_cnt"));
+String post_content = cur_post.get("themecol");
+ArrayList<HashMap<String, String>> reply_list = getReplyList(post_id);
+
+// int block_id = 1;
+// String block_name = "体育";
+// String post_title = "自由泳长一点的标题";
+// String post_author = "bibi";
+// String post_time = "2019/06/06 0:25";
+// int click_cnt = 15;
+// int reply_cnt = 12;
+// String post_content = "这哇塞了的供sdgsdghf阿反驳日本d货商的合格率是的会更好来干哈省略号市工会哦哦核苷酸读后感的搜狐给的搜";
+// for (int i = 0; i < 10; i++) post_content += "  sagsdoinshds \n";
+
 %>
 <html>
     <head>
@@ -108,6 +171,7 @@ for (int i = 0; i < 10; i++) post_content += "  sagsdoinshds \n";
                 background: #eee;
                 border-radius: 5px;
                 padding: 10px 20px;
+                white-space: pre-wrap;
             }
             .container .reply-box
             {
@@ -152,10 +216,28 @@ for (int i = 0; i < 10; i++) post_content += "  sagsdoinshds \n";
         </style>
         <%-- 全局变量存储所有回复。 --%>
         <script>
+            function clickBlock()
+            {
+                window.location.href="block.jsp?block_id="+block_id;
+            }
+            // 点赞
+
+            function clickLove()
+            {
+
+            }
             // 点击回复
             function onReply()
             {
-                
+                <% if (session.getAttribute("userName") == null){ %>
+                    alert("请登录后再回复");
+                <% } %>
+                var reply_content = document.querySelector(".reply-box .editor-box .editor-text").value;
+                if (reply_content == "")
+                {
+                    alert("回复内容不能为空");
+                }
+                window.location.href="post.jsp?block_id="+block_id+"&post_id="+post_id+"?reply_content="+reply_content;
             }
         </script>
     </head>
@@ -166,7 +248,7 @@ for (int i = 0; i < 10; i++) post_content += "  sagsdoinshds \n";
             <div class="header">
                 <a href="index.jsp"> 简单论坛 </a>
                 >>
-                <a href=""> <%= block_str %> </a>
+                <a href="JavaScript:clickBlock()"> <%= block_str %> </a>
             </div>
             <div class="post-head">
                 <h1 >
@@ -185,21 +267,21 @@ for (int i = 0; i < 10; i++) post_content += "  sagsdoinshds \n";
                 </div>
                 <div class="action">
                     <p>
-                        <a> 点赞 </a> 
+                        <a href="JavaScript:clickLove()"> 点赞 </a> 
                         | 
-                        <a> 回复 </a>
+                        <a href="#reply_editor"> 回复 </a>
                     </p>
                 </div>
             </div>
             <div class="reply-container">
-                <% for (int i = 0; i < 10; i++) { %>
+                <% for (int i = 0; i < reply_list.size(); i++) { %>
                 <div class="reply-item">
                     <div class="reply-head">
-                        <span>1楼: <a> 楼主 </a></span>
-                        <span>时间: <a> 2019/06/06 10:24 </a> </span>
+                        <span> <%= i+1 %>楼: <a> <%=getUserName(reply_list.get(i).get("user_id")) %> </a></span>
+                        <span> 时间: <a> <%= reply_list.get(i).get("reply_time") %> </a> </span>
                     </div>
                     <div class="reply-body">
-                        neiron 
+                        <%= reply_list.get(i).get("content") %>
                     </div>
                 </div>
                 <% } %>
@@ -208,7 +290,7 @@ for (int i = 0; i < 10; i++) post_content += "  sagsdoinshds \n";
                 <div class="editor-bar">
                 </div>
                 <div class="editor-box">
-                    <textarea class="editor-text" name="reply_content">
+                    <textarea class="editor-text" name="reply_editor">
                     </textarea>
                 </div>
                 <div class="editor-submit">
