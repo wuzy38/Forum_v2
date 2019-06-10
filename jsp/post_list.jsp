@@ -27,4 +27,9 @@
             </tr>
         <% } %>
     </table>
+    <div class="page-btns">
+        <%= page_id %> / <%= page_cnt %>
+        <button <%= page_id==1?"disabled":"" %> > 上一页 </button>
+        <button <%= post_list.size() < page_id * PageSize ? "disabled":""%> > 下一页 </button>
+    </div>
 </div>

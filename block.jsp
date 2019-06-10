@@ -43,6 +43,11 @@ int getReplyCnt(ArrayList<HashMap<String, String>> post_list)
     return res;
 }
 
+String getUserName(String user_id)
+{
+    return conn.getRowByID("user", Integer.parseInt(user_id) ).get("user_name");
+}
+
 %>
 <%
     ArrayList<HashMap<String, String>> block_list = getBlockList();
@@ -303,6 +308,10 @@ int getReplyCnt(ArrayList<HashMap<String, String>> post_list)
                 // 重定向, 新的block
                 window.location.href="block.jsp?block_id="+i;
             }
+            function onWritePost()
+            {
+                window.location.href="writePost.jsp?block_id="+block_id;
+            }
             function clickSortType(i)
             {
                 if (i == sort_type) return;
@@ -310,17 +319,19 @@ int getReplyCnt(ArrayList<HashMap<String, String>> post_list)
             }
             function clickNextPage()
             {
-
+                if (post_list.size() < page_id * PageSize) return;
+                window.location.href="block.jsp?block_id="+block_id+"&sort_type="+sort_type+"&page_id="+(page_id+1);
             }
             function clickPrePage()
             {
-
+                if (page_id <= 1) return;
+                window.location.href="block.jsp?block_id="+block_id+"&sort_type="+sort_type+"&page_id="+(page_id-1);
             }
-            function clickPost()
+            function clickPost(post_id)
             {
-                
+                width.location.href="post.jsp?block_id="+block_id+"&post_id="+post_id;
             }
-            function clickUser()
+            function clickUser(user_id)
             {
 
             }
@@ -365,7 +376,7 @@ int getReplyCnt(ArrayList<HashMap<String, String>> post_list)
                         <li class="<%= sort_type==1?"cur":"" %>"> <a href="JavaScript:clickSortType(1)"> 默认 </a> </li>
                         <li class="<%= sort_type==2?"cur":"" %>"> <a href="JavaScript:clickSortType(2)"> 最新 </a> </li>
                         <li class="<%= sort_type==3?"cur":"" %>"> <a href="JavaScript:clickSortType(3)"> 最热 </a> </li>
-                        <li class="post"> <button onclick="clickPost()"> 发帖 </button></li>
+                        <li class="post"> <button onclick="onWritePost()"> 发帖 </button></li>
                     </ul>
                 </div>
                 <div class="post-list">
@@ -379,8 +390,8 @@ int getReplyCnt(ArrayList<HashMap<String, String>> post_list)
                         </tr>
                         <% for (int i = (page_id-1) * PageSize; i < post_list.size() && i < page_id*PageSize; i++) { %>
                             <tr>
-                                <td class="title"> <a href="JavaScript:clickPost()"> <%=post_list.get(i).get("theme_name")%> </a> </td>
-                                <td class="author"> <a href="JavaScript:clickUser()"> <%=post_list.get(i).get("user_id")%> </a> </td>
+                                <td class="title"> <a href="JavaScript:clickPost(<%=post_list.get(i).get("theme_id")%>)"> <%=post_list.get(i).get("theme_name")%> </a> </td>
+                                <td class="author"> <a href="JavaScript:clickUser(<%=post_list.get(i).get("user_id")%>)"> <%=getUserName(post_list.get(i).get("user_id"))%> </a> </td>
                                 <td class="click"> <%= post_list.get(i).get("click_num") %> </td>
                                 <td class="reply"> <%= post_list.get(i).get("reply_cnt") %> </td>
                                 <td class="time"> <%= post_list.get(i).get("theme_time") %> </td>
@@ -389,8 +400,8 @@ int getReplyCnt(ArrayList<HashMap<String, String>> post_list)
                     </table>
                     <div class="page-btns">
                         <%= page_id %> / <%= page_cnt %>
-                        <button <%= page_id==1?"disabled":"" %> > 上一页 </button>
-                        <button <%= post_list.size() < page_id * PageSize ? "disabled":""%> > 下一页 </button>
+                        <button onclick="clickPrePage()" <%= page_id==1?"disabled":"" %> > 上一页 </button>
+                        <button onclick="clickNextPage()" <%= post_list.size() < page_id * PageSize ? "disabled":""%> > 下一页 </button>
                     </div>
                 </div>
             </div>

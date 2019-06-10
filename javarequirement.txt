@@ -33,3 +33,8 @@ getRowByID(String table_name, int id)
 根据帖子id, 帖子的所有回复
 输入: id
 返回: ArrayList<HashMap<String, String>>
+
+------------------
+根据用户名返回用户id
+输入: 用户名
+返回: 用户ID
