@@ -1,14 +1,27 @@
 <%@ page language="java" import="java.util.*,java.sql.*, com.*"
 contentType="text/html; charset=utf-8"%>
 
+<%!
+
+int getUserIdByName(String user_name)
+{
+    return 1;
+}
+
+%>
+
 <%
-    int block_id = request.getParameter("block_id");
+    int block_id = request.getParameter("block_id")==null ? 1 :Integer.parseInt(request.getParameter("block_id"));
     if (request.getMethod().equalsIgnoreCase("post"))
     {
-        String userName = session.getAttribute("userName");
+        String userName = (String)session.getAttribute("userName");
         String post_title = request.getParameter("title");
         String post_content = request.getParameter("content");
+        MysqlConnector conn = new MysqlConnector();
+        conn.addTheme(post_title, block_id, getUserIdByName(userName));
+        response.sendRedirect("block.jsp?block_id="+block_id);
     }
+
 %>
 
 
@@ -79,6 +92,9 @@ contentType="text/html; charset=utf-8"%>
         <script>
             function clickSubmit()
             {
+                <% if (session.getAttribute("userName") == null){ %>
+                    alert("请先登录");
+                <% } %>
                 var post_title = document.querySelector(".post-title .title");
                 if (post_title.value == "")
                 {

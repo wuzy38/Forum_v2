@@ -308,6 +308,10 @@ String getUserName(String user_id)
                 // 重定向, 新的block
                 window.location.href="block.jsp?block_id="+i;
             }
+            function onWritePost()
+            {
+                window.location.href="writePost.jsp?block_id="+block_id;
+            }
             function clickSortType(i)
             {
                 if (i == sort_type) return;
@@ -372,7 +376,7 @@ String getUserName(String user_id)
                         <li class="<%= sort_type==1?"cur":"" %>"> <a href="JavaScript:clickSortType(1)"> 默认 </a> </li>
                         <li class="<%= sort_type==2?"cur":"" %>"> <a href="JavaScript:clickSortType(2)"> 最新 </a> </li>
                         <li class="<%= sort_type==3?"cur":"" %>"> <a href="JavaScript:clickSortType(3)"> 最热 </a> </li>
-                        <li class="post"> <button onclick="clickPost()"> 发帖 </button></li>
+                        <li class="post"> <button onclick="onWritePost()"> 发帖 </button></li>
                     </ul>
                 </div>
                 <div class="post-list">
