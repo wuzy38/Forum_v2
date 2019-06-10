@@ -41,7 +41,8 @@
         var file_obj = file_dom.files[0];     // 获取file控件中的内容
         // alert("发送2");
         var formData = new FormData();
-        formData.append("__source", file_obj);
+        formData.append("file_obj", file_obj);
+        formData.append("test", "test_text");
         // alert("发送3");
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange=function()
@@ -52,7 +53,7 @@
             }
         }
         xhr.open("POST", "uploadImg.jsp");
-        xhr.setRequestHeader("Content-Type","multipart/form-data");
+        // xhr.setRequestHeader("Content-Type","multipart/form-data");
         xhr.send(formData);
         // alert("发送4");
     }

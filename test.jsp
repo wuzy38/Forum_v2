@@ -6,9 +6,10 @@
         </title>
     </head>
     <body>
-        <p>
-            my jsp test java
-        </p>
+        <form action="uploadImg.jsp" method="post" enctype="multipart/form-data">
+            <input type="file" class="img-submit" id="img_submit" name="file_obj">
+            <input type="submit">
+        </form>
     </body>
 </html>
 
