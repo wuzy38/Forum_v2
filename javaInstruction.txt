@@ -46,9 +46,9 @@ ArrayList<HashMap<String, String>> getReplyByThemeID(int theme_id)
 返回: ArrayList<HashMap<String, String>>
 
 
-String getNameByUserID(int id)
-根据用户ID查找用户名
-输入：id
-返回：user_name，若没有结果，返回空字符串 
+String int getIDbyUsername(String user_name) 
+根据用户user_name查找ID
+输入：user_name
+返回：id，若没有结果，返回-1
 
 
