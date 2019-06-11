@@ -58,8 +58,8 @@ String getUserName(String user_id)
     int page_id = getIntVal("page_id", request.getParameter("page_id"), 1, page_cnt);
     HashMap<String, String> cur_block = block_list.get(block_id-1);
     String block_str = cur_block.get("plate_name");
-    int main_post_cnt = Integer.parseInt(cur_block.get("theme_cnt")) ;
-    int reply_post_cnt = getReplyCnt(post_list);
+    int main_post_cnt = Integer.parseInt(cur_block.get("theme_cnt"));
+    int reply_post_cnt = getReplyCnt(post_list)-main_post_cnt;      // 帖子的内容是第一个回复
     String block_intro = cur_block.get("introduction");
     String block_open_time = "2019年6月1日";
 %>
@@ -394,7 +394,7 @@ String getUserName(String user_id)
                                 <td class="title"> <a href="JavaScript:clickPost(<%=post_list.get(i).get("theme_id")%>)"> <%=post_list.get(i).get("theme_name")%> </a> </td>
                                 <td class="author"> <a href="JavaScript:clickUser(<%=post_list.get(i).get("user_id")%>)"> <%=getUserName(post_list.get(i).get("user_id"))%> </a> </td>
                                 <td class="click"> <%= post_list.get(i).get("click_num") %> </td>
-                                <td class="reply"> <%= post_list.get(i).get("reply_cnt") %> </td>
+                                <td class="reply"> <%= Integer.parseInt(post_list.get(i).get("reply_cnt"))-1 %> </td>
                                 <td class="time"> <%= post_list.get(i).get("theme_time") %> </td>
                             </tr>
                         <% } %>

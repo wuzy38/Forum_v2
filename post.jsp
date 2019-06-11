@@ -41,7 +41,7 @@ String getUserName(String user_id)
 
 int getUserIdByName(String user_name)
 {
-    return 1;
+    return conn.getIDbyUsername(user_name);
 }
 
 %>
@@ -54,6 +54,7 @@ String block_name = block_list.get(block_id-1).get("plate_name");
 int post_id = getIntVal("post_id", request.getParameter("post_id"), 1, post_list.size());
 if (session.getAttribute("userName") != null && request.getParameter("reply_content") != null)
 {
+    System.out.println(request.getParameter("reply_content"));
     conn.addReply(getUserIdByName((String)session.getAttribute("userName")), request.getParameter("reply_content"), post_id);
     post_list = getPostList();
 }
@@ -63,8 +64,8 @@ String post_author = getUserName(cur_post.get("user_id"));
 String post_time = cur_post.get("theme_time");
 int click_cnt = Integer.parseInt(cur_post.get("click_num"));
 int reply_cnt = Integer.parseInt(cur_post.get("reply_cnt"));
-String post_content = cur_post.get("themecol");
 ArrayList<HashMap<String, String>> reply_list = getReplyList(post_id);
+String post_content = reply_list.get(0).get("content");
 
 // int block_id = 1;
 // String block_name = "体育";
@@ -215,14 +216,15 @@ ArrayList<HashMap<String, String>> reply_list = getReplyList(post_id);
                 height: 30px;
             }
         </style>
-        <%-- 全局变量存储所有回复。 --%>
+
         <script>
+            block_id = "<%= block_id %>";
+            post_id = "<%= post_id %>";
             function clickBlock()
             {
-                window.location.href="block.jsp?block_id="+"<%= block_id %>";
+                window.location.href="block.jsp?block_id="+block_id;
             }
             // 点赞
-
             function clickLove()
             {
 
@@ -238,7 +240,9 @@ ArrayList<HashMap<String, String>> reply_list = getReplyList(post_id);
                 {
                     alert("回复内容不能为空");
                 }
-                window.location.href="post.jsp?block_id="+block_id+"&post_id="+post_id+"?reply_content="+reply_content;
+                reply_content = reply_content.replace('/n','<br />');
+                alert(reply_content);
+                window.location.href="post.jsp?block_id="+block_id+"&post_id="+post_id+"&reply_content="+reply_content;
             }
         </script>
     </head>
@@ -275,10 +279,10 @@ ArrayList<HashMap<String, String>> reply_list = getReplyList(post_id);
                 </div>
             </div>
             <div class="reply-container">
-                <% for (int i = 0; i < reply_list.size(); i++) { %>
+                <% for (int i = 1; i < reply_list.size(); i++) { %>
                 <div class="reply-item">
                     <div class="reply-head">
-                        <span> <%= i+1 %>楼: <a> <%=getUserName(reply_list.get(i).get("user_id")) %> </a></span>
+                        <span> <%= i %>楼: <a> <%=getUserName(reply_list.get(i).get("user_id")) %> </a></span>
                         <span> 时间: <a> <%= reply_list.get(i).get("reply_time") %> </a> </span>
                     </div>
                     <div class="reply-body">
