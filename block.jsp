@@ -329,7 +329,8 @@ String getUserName(String user_id)
             }
             function clickPost(post_id)
             {
-                width.location.href="post.jsp?block_id="+block_id+"&post_id="+post_id;
+                alert(post_id);
+                window.location.href="post.jsp?block_id="+block_id+"&post_id="+post_id;
             }
             function clickUser(user_id)
             {

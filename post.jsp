@@ -1,5 +1,6 @@
 <%-- jsp传递block_id和post_id reply_content --%>
-<%@ page contentType="text/html; charset=utf-8" %>
+<%@ page language="java" import="java.util.*,java.sql.*, com.*"
+contentType="text/html; charset=utf-8"%>
 <%-- 根据帖子id获取当前帖子的信息 --%>
 <%-- 根据帖子id获取所有回复 --%>
 
@@ -30,17 +31,17 @@ ArrayList<HashMap<String, String>> getPostList()
 
 ArrayList<HashMap<String, String>> getReplyList(int post_id)
 {
-    return conn.getReplyByTheme(post_id);
+    return conn.getReplyByThemeID(post_id);
 }
 
 String getUserName(String user_id)
 {
-    return conn.getRowById("user", Integer.parseInt(user_id) ).get("user_name");
+    return conn.getRowByID("user", Integer.parseInt(user_id) ).get("user_name");
 }
 
 int getUserIdByName(String user_name)
 {
-
+    return 1;
 }
 
 %>
@@ -53,7 +54,7 @@ String block_name = block_list.get(block_id-1).get("plate_name");
 int post_id = getIntVal("post_id", request.getParameter("post_id"), 1, post_list.size());
 if (session.getAttribute("userName") != null && request.getParameter("reply_content") != null)
 {
-    addReply(getUserIdByName(session.getAttribute("userName")), reply_content, post_id);
+    conn.addReply(getUserIdByName((String)session.getAttribute("userName")), request.getParameter("reply_content"), post_id);
     post_list = getPostList();
 }
 HashMap<String, String> cur_post = post_list.get(post_id-1);
@@ -218,7 +219,7 @@ ArrayList<HashMap<String, String>> reply_list = getReplyList(post_id);
         <script>
             function clickBlock()
             {
-                window.location.href="block.jsp?block_id="+block_id;
+                window.location.href="block.jsp?block_id="+"<%= block_id %>";
             }
             // 点赞
 
@@ -248,7 +249,7 @@ ArrayList<HashMap<String, String>> reply_list = getReplyList(post_id);
             <div class="header">
                 <a href="index.jsp"> 简单论坛 </a>
                 >>
-                <a href="JavaScript:clickBlock()"> <%= block_str %> </a>
+                <a href="JavaScript:clickBlock()"> <%= block_name %> </a>
             </div>
             <div class="post-head">
                 <h1 >
@@ -290,8 +291,7 @@ ArrayList<HashMap<String, String>> reply_list = getReplyList(post_id);
                 <div class="editor-bar">
                 </div>
                 <div class="editor-box">
-                    <textarea class="editor-text" name="reply_editor">
-                    </textarea>
+                    <textarea class="editor-text" name="reply_editor"></textarea>
                 </div>
                 <div class="editor-submit">
                     <button class="editor-btn" type="button" onclick="onReply()">
