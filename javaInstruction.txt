@@ -1,4 +1,4 @@
-MysqlConnector.class
+﻿MysqlConnector.class
 
 构造函数空
 
@@ -45,5 +45,10 @@ ArrayList<HashMap<String, String>> getReplyByThemeID(int theme_id)
 输入: theme_id
 返回: ArrayList<HashMap<String, String>>
 
+
+String getNameByUserID(int id)
+根据用户ID查找用户名
+输入：id
+返回：user_name，若没有结果，返回空字符串 
 
 
