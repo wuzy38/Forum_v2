@@ -7,6 +7,7 @@
 </head>
 <body>
 	<h3>test</h3>
+	
 	<% 
 		String jspName = this.getClass().getSimpleName().replaceAll("_", "."); 
 		String url = new String(jspName);
@@ -16,6 +17,7 @@
 		<input type="file" name="txt1" size=100> 
 		<input type="submit" value="OK">
 	</form>
+
 	<p>
 		提示信息: <span id="txtHint"></span>
 	</p>

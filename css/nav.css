@@ -118,3 +118,13 @@
     margin: 6px 0;
     padding: 0;
 }
+
+.nav-content .nav-user button .user-img
+{
+    width: 36px;
+    height: 36px;
+    border-radius: 18px;
+    border: none;
+    margin: 0;
+    padding: 0;
+}

@@ -19,6 +19,7 @@ int getUserIdByName(String user_name)
         String post_content = request.getParameter("content");
         MysqlConnector conn = new MysqlConnector();
         conn.addTheme(post_title, block_id, getUserIdByName(userName));
+        // conn.addReply();
         response.sendRedirect("block.jsp?block_id="+block_id);
     }
 

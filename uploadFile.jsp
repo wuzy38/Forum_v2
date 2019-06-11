@@ -38,14 +38,15 @@
 // 						System.out.println("application.getRealPath()=" + application.getRealPath("") );
 // 						System.out.println("System.getProperty(file.separator)=" + System.getProperty("file.separator"));
 // 						System.out.println("FilenameUtils.getName(dfi.getName())=" + FilenameUtils.getName(dfi.getName()));
-						String fileAdd = application.getRealPath("photo") 
+						String fileAdd = application.getRealPath("Forum/images/user") 
 								+ System.getProperty("file.separator");
 								
 						File uploadDir = new File(fileAdd);
 				        if (!uploadDir.exists()) {
 				            uploadDir.mkdir();
 				        }
-				        String fileName = fileAdd + FilenameUtils.getName(dfi.getName());
+						// String fileName = fileAdd + FilenameUtils.getName("test.png");
+				        String fileName = fileAdd + FilenameUtils.getName((String)session.getAttribute("userName") + ".png");
 						out.print(new File(fileName).getAbsolutePath());
 						dfi.write(new File(fileName));
 					} //if
