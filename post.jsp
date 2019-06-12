@@ -52,10 +52,10 @@ ArrayList<HashMap<String, String>> post_list = getPostList();
 int block_id = getIntVal("block_id", request.getParameter("block_id"), 1, block_list.size());
 String block_name = block_list.get(block_id-1).get("plate_name");
 int post_id = getIntVal("post_id", request.getParameter("post_id"), 1, post_list.size());
-if (session.getAttribute("userName") != null && request.getParameter("reply_content") != null)
+if (session.getAttribute("userName") != null && request.getParameter("reply_editor") != null)
 {
-    System.out.println(request.getParameter("reply_content"));
-    conn.addReply(getUserIdByName((String)session.getAttribute("userName")), request.getParameter("reply_content"), post_id);
+    System.out.println(request.getParameter("reply_editor"));
+    conn.addReply(getUserIdByName((String)session.getAttribute("userName")), request.getParameter("reply_editor"), post_id);
     post_list = getPostList();
 }
 HashMap<String, String> cur_post = post_list.get(post_id-1);
@@ -124,6 +124,7 @@ String post_content = reply_list.get(0).get("content");
             {
                 margin: 30px auto;
                 text-align: center;
+                text-decoration: none;
             }
             .container .post-head .post-inf span
             {
@@ -135,6 +136,7 @@ String post_content = reply_list.get(0).get("content");
                 background: #eee;
                 border-radius: 5px;
                 padding: 10px 20px;
+                text-decoration: none;
             }
             .container .post-body .post-text
             {
@@ -234,15 +236,15 @@ String post_content = reply_list.get(0).get("content");
             {
                 <% if (session.getAttribute("userName") == null){ %>
                     alert("请登录后再回复");
+                    return false;
                 <% } %>
                 var reply_content = document.querySelector(".reply-box .editor-box .editor-text").value;
                 if (reply_content == "")
                 {
                     alert("回复内容不能为空");
+                    return false;
                 }
-                reply_content = reply_content.replace('/n','<br />');
-                alert(reply_content);
-                window.location.href="post.jsp?block_id="+block_id+"&post_id="+post_id+"&reply_content="+reply_content;
+                return true;
             }
         </script>
     </head>
@@ -260,7 +262,7 @@ String post_content = reply_list.get(0).get("content");
                     <span class="post-title"> <%= post_title %> </span>
                 </h1>
                 <div class="post-inf">
-                    <span> 楼主: <a> <%= post_author %> </a></span> 
+                    <span> 楼主: <a href=""> <%= post_author %> </a></span> 
                     <span> 时间: <%= post_time %> </span>
                     <span> 点击: <%= click_cnt %> </span>
                     <span> 回复: <%= reply_cnt %> </span>
@@ -294,14 +296,18 @@ String post_content = reply_list.get(0).get("content");
             <div class="reply-box">
                 <div class="editor-bar">
                 </div>
-                <div class="editor-box">
-                    <textarea class="editor-text" name="reply_editor"></textarea>
-                </div>
-                <div class="editor-submit">
-                    <button class="editor-btn" type="button" onclick="onReply()">
-                        回复
-                    </button>
-                </div>
+                <form method="post" action="post.jsp">
+                    <input type="hidden" name="block_id" value="<%= block_id %>">
+                    <input type="hidden" name="post_id" value="<%= post_id %>">
+                    <div class="editor-box">
+                        <textarea class="editor-text" name="reply_editor"></textarea>
+                    </div>
+                    <div class="editor-submit">
+                        <button class="editor-btn" type="submit" onclick="return onReply()">
+                            回复
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
         
