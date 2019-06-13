@@ -3,26 +3,27 @@ contentType="text/html; charset=utf-8"%>
 
 <%!
 
-int getUserIdByName(String user_name)
+void addPost(String post_title, String post_content, int block_id, String user_name)
 {
-    return 1;
+    MysqlConnector conn = new MysqlConnector();
+    System.out.println(post_title);
+    int post_id = conn.addTheme(post_title, block_id, conn.getIDbyUsername(user_name));
+    conn.addReply(conn.getIDbyUsername(user_name), post_content, post_id);
 }
 
 %>
 
 <%
+    request.setCharacterEncoding("utf-8");
     int block_id = request.getParameter("block_id")==null ? 1 :Integer.parseInt(request.getParameter("block_id"));
     if (request.getMethod().equalsIgnoreCase("post"))
     {
         String userName = (String)session.getAttribute("userName");
         String post_title = request.getParameter("title");
         String post_content = request.getParameter("content");
-        MysqlConnector conn = new MysqlConnector();
-        conn.addTheme(post_title, block_id, getUserIdByName(userName));
-        // conn.addReply();
+        addPost(post_title, post_content, block_id, userName);
         response.sendRedirect("block.jsp?block_id="+block_id);
     }
-
 %>
 
 
