@@ -54,3 +54,6 @@ String int getIDbyUsername(String user_name)
 
 
 ArrayList<HashMap<String, String>> getThemeByContent(String content)
+
+void incClickNum(int theme_id)
+
