@@ -1,4 +1,22 @@
-<%@ page contentType="text/html; charset=utf-8" %>
+<%@ page language="java" import="java.util.*,java.sql.*, com.*"
+contentType="text/html; charset=utf-8"%>
+
+<%!
+MysqlConnector conn = new MysqlConnector();
+ArrayList<HashMap<String, String>> getPostList()
+{
+    return conn.getThemeInOrder(-1, 3);
+}
+String getUserName(String user_id)
+{
+    return conn.getRowByID("user", Integer.parseInt(user_id) ).get("user_name");
+}
+%>
+
+<%
+    ArrayList<HashMap<String, String>> post_list = getPostList();
+%>
+
 <html>
     <head>
         <title>
@@ -56,6 +74,17 @@
                 background: #f2f2f2;
             }
         </style>
+        <script>
+            function clickPost(block_id, post_id)
+            {
+                alert(post_id);
+                window.location.href="post.jsp?block_id="+block_id+"&post_id="+post_id;
+            }
+            function clickUser(user_id)
+            {
+                
+            }
+        </script>
     </head>
     <body>
         <%-- 导航条html模板 高度50 --%>
@@ -64,15 +93,6 @@
         <div class="container">
 
             <div class="main-content">
-                <div class="rank-nav">
-                    <ul>
-                        <li> 24小时 </li>
-                        <li> 日榜 </li>
-                        <li> 周榜 </li>
-                        <li> 月榜 </li>
-                        <li> </li>
-                    </ul>
-                </div>
                 <div class="post-list">
                     <table>
                         <tr class="header">
@@ -82,13 +102,13 @@
                             <th class="reply"> 回复 </th>
                             <th class="time"> 发表时间 </th>
                         </tr>
-                        <% for (int i = 0; i < 200; i++) { %>
+                        <% for (int i = 0; i < post_list.size(); i++) { %>
                             <tr class="item">
-                                <td class="title"> <a href="JavaScript:clickPost()">标题是很长很长的，宽度需要很大的哎哎哎</a> </td>
-                                <td class="author"> <a href="JavaScript:clickUser()">作者也可能比较长</a> </td>
-                                <td class="click"> 1254932 </td>
-                                <td class="reply"> 12532 </td>
-                                <td class="time"> 2019.06.05 </td>
+                                <td class="title"> <a href="JavaScript:clickPost(<%=post_list.get(i).get("plate_id")%>, <%=post_list.get(i).get("theme_id")%>)"> <%=post_list.get(i).get("theme_name")%> </a> </td>
+                                <td class="author"> <a href="JavaScript:clickUser(<%=post_list.get(i).get("user_id")%>)"> <%=getUserName(post_list.get(i).get("user_id"))%> </a> </td>
+                                <td class="click"> <%= post_list.get(i).get("click_num") %> </td>
+                                <td class="reply"> <%= Integer.parseInt(post_list.get(i).get("reply_cnt"))-1 %> </td>
+                                <td class="time"> <%= post_list.get(i).get("theme_time") %> </td>
                             </tr>
                         <% } %>
                     </table>
