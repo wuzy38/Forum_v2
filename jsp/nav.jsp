@@ -13,9 +13,9 @@
         </div>
         <div class="nav-main">
             <ul>
-                <li>
+                <%-- <li>
                     <a href="index.jsp"> 首页 </a>
-                </li>
+                </li> --%>
                 <li>
                     <a href="block.jsp"> 板块 </a>
                 </li>
@@ -24,12 +24,15 @@
                 </li>
             </ul>
             <div class="search-bar">
-                <div class="search-bar-input">
-                    <input >
-                </div>
-                <div class="search-bar-btn">
-                    <a class="fa fa-search" aria-hidden="true"></a>
-                </div>
+                <form action="searchRes.jsp" method="post"> 
+                    <div class="search-bar-input">
+                        <input type="text" name="search_key" id="search_text">
+                    </div>
+                    <div class="search-bar-btn">
+                        <a class="fa fa-search" aria-hidden="true" href="JavaScript:clickSearch()"></a>
+                    </div>
+                    <input type="submit" style="display:none;" id="search_submit" >
+                </form>
             </div>
         </div>
         <div class="nav-user">
@@ -46,6 +49,17 @@
     </div>
 </div>
 <script>
+    function clickSearch()
+    {
+        var search_text = document.querySelector(".nav-main .search-bar #search_text").value;
+        if (search_text == "")
+        {
+            alert("请输入搜索关键词");
+            return false;
+        }
+        var search_submit = document.querySelector(".nav-main .search-bar #search_submit");
+        search_submit.click();
+    }
     function clickImg()
     {
         // alert("click img");

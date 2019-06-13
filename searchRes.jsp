@@ -5,7 +5,7 @@ contentType="text/html; charset=utf-8"%>
 MysqlConnector conn = new MysqlConnector();
 ArrayList<HashMap<String, String>> getPostList(String search_key)
 {
-    return conn.getThemeInOrder(-1, 3);
+    return conn.getThemeByContent(search_key);
 }
 String getUserName(String user_id)
 {
@@ -90,6 +90,7 @@ String getUserName(String user_id)
         <div class="container">
 
             <div class="main-content">
+                <h3> 搜索结果>> </h3> 
                 <div class="post-list">
                     <table>
                         <tr class="header">

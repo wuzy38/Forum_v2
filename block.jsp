@@ -74,7 +74,7 @@ String getUserName(String user_id)
         <link rel="stylesheet" type="text/css" href="css/nav.css" />
         <style>
             /* 导航条 当前界面为第2个 */
-            .nav-content .nav-main ul li:nth-of-type(2) a
+            .nav-content .nav-main ul li:nth-of-type(1) a
             {
                 border-bottom: 4px solid blue;
                 color: #000;

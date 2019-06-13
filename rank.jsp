@@ -15,6 +15,7 @@ String getUserName(String user_id)
 
 <%
     ArrayList<HashMap<String, String>> post_list = getPostList();
+    System.out.println(post_list.size());
 %>
 
 <html>
@@ -28,7 +29,7 @@ String getUserName(String user_id)
         <link rel="stylesheet" type="text/css" href="css/post_list.css" />
         <style>
             /* 导航条 当前界面为第3个 */
-            .nav-content .nav-main ul li:nth-of-type(3) a
+            .nav-content .nav-main ul li:nth-of-type(2) a
             {
                 border-bottom: 4px solid blue;
                 color: #000;

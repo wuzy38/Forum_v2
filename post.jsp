@@ -44,6 +44,10 @@ int getUserIdByName(String user_name)
     return conn.getIDbyUsername(user_name);
 }
 
+void clickPost(int post_id)
+{
+    conn.incClickNum(post_id);
+}
 %>
 
 <%
@@ -67,6 +71,7 @@ int click_cnt = Integer.parseInt(cur_post.get("click_num"));
 int reply_cnt = Integer.parseInt(cur_post.get("reply_cnt"));
 ArrayList<HashMap<String, String>> reply_list = getReplyList(post_id);
 String post_content = reply_list.get(0).get("content");
+clickPost(post_id);
 
 // int block_id = 1;
 // String block_name = "体育";
