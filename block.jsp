@@ -24,7 +24,6 @@ int PageSize = 10;
 MysqlConnector conn = new MysqlConnector();
 ArrayList<HashMap<String, String>> getBlockList()
 {
-    
     return conn.getTableData("plate");
 }
 
@@ -51,6 +50,7 @@ String getUserName(String user_id)
 %>
 <%
     ArrayList<HashMap<String, String>> block_list = getBlockList();
+    System.out.println(block_list.size());
     int block_id = getIntVal("block_id", request.getParameter("block_id"), 1, block_list.size());
     int sort_type = getIntVal("sort_type", request.getParameter("sort_type"), 1, 3);
     ArrayList<HashMap<String, String>> post_list = getPostList(block_id, sort_type);
