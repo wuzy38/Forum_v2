@@ -28,7 +28,7 @@ boolean LoginUser(String userName, String passWord, String submit_type)
     if (session.getAttribute("userName") != null)
     {
         // 重定向->跳转到index.jsp
-        response.sendRedirect("index.jsp");
+        response.sendRedirect("block.jsp");
     }
     request.setCharacterEncoding("UTF-8");
     String userName = "";
@@ -47,7 +47,7 @@ boolean LoginUser(String userName, String passWord, String submit_type)
             // 设置session
             session.setAttribute("userName", userName);
             // 重定向->跳转到index.jsp
-            response.sendRedirect("index.jsp?userName="+userName);
+            response.sendRedirect("block.jsp");
         }
         // else 注册登录错误 -> js处理
     }

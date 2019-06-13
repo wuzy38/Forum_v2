@@ -47,6 +47,7 @@ int getUserIdByName(String user_name)
 void clickPost(int post_id)
 {
     conn.incClickNum(post_id);
+    System.out.println("called");
 }
 %>
 
@@ -63,6 +64,10 @@ if (session.getAttribute("userName") != null && request.getParameter("reply_edit
     conn.addReply(getUserIdByName((String)session.getAttribute("userName")), request.getParameter("reply_editor"), post_id);
     post_list = getPostList();
 }
+else 
+{
+    clickPost(post_id);
+}
 HashMap<String, String> cur_post = post_list.get(post_id-1);
 String post_title = cur_post.get("theme_name");
 String post_author = getUserName(cur_post.get("user_id"));
@@ -71,17 +76,6 @@ int click_cnt = Integer.parseInt(cur_post.get("click_num"));
 int reply_cnt = Integer.parseInt(cur_post.get("reply_cnt"));
 ArrayList<HashMap<String, String>> reply_list = getReplyList(post_id);
 String post_content = reply_list.get(0).get("content");
-clickPost(post_id);
-
-// int block_id = 1;
-// String block_name = "体育";
-// String post_title = "自由泳长一点的标题";
-// String post_author = "bibi";
-// String post_time = "2019/06/06 0:25";
-// int click_cnt = 15;
-// int reply_cnt = 12;
-// String post_content = "这哇塞了的供sdgsdghf阿反驳日本d货商的合格率是的会更好来干哈省略号市工会哦哦核苷酸读后感的搜狐给的搜";
-// for (int i = 0; i < 10; i++) post_content += "  sagsdoinshds \n";
 
 %>
 <html>
@@ -264,7 +258,7 @@ clickPost(post_id);
         <%@ include file="jsp/nav.jsp"%>
         <div class="container">
             <div class="header">
-                <a href="index.jsp"> 简单论坛 </a>
+                <a href="block.jsp"> 简单论坛 </a>
                 >>
                 <a href="JavaScript:clickBlock()"> <%= block_name %> </a>
             </div>
