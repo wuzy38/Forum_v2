@@ -38,6 +38,13 @@
                 margin: 20px 0;
                 background: #f2f2f2;
             }
+            .right-container .item .more
+            {
+                margin: 20px 0;
+                background: #f2f2f2;
+                text-align: center;
+                text-decoration: none;
+            }
         </style>
     </head>
     <body>
@@ -103,7 +110,7 @@
                         </div>
                     </div>
                     <div class="more">
-                        <a> 查看更多> </a>
+                        <a href="block.jsp"> 查看更多> </a>
                     </div>
                 </div>
             </div>

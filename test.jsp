@@ -1,8 +1,10 @@
-<%@ page language="java" import="java.util.*"
-	contentType="text/html;charset=utf-8"%>
+<%@ page language="java" import="java.util.*,java.sql.*, com.*"
+contentType="text/html; charset=utf-8"%>
 
 <%
-	request.getParameter("post_id");
+	MysqlConnector conn = new MysqlConnector();
+	ArrayList<HashMap<String, String>> block_list = conn.getTableData("plate");
+	System.out.println(block_list.size());
 %>
 <!DOCTYPE HTML>
 <html>

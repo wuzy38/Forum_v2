@@ -94,27 +94,7 @@
                     </table>
                 </div>
             </div>
-            <div class="right-container">
-                <div class="item">
-                    <div class="title">
-                        热门板块
-                    </div>
-                    <div class="content">
-                        <div> 
-                            <a> 体育 </a>
-                        </div>
-                        <div>
-                            <a> 游泳 </a>
-                        </div>
-                        <div>
-                            <a> tomcat </a>
-                        </div>
-                    </div>
-                    <div class="more">
-                        <a> 查看更多> </a>
-                    </div>
-                </div>
-            </div>
+        
         </div>
         
     </body>

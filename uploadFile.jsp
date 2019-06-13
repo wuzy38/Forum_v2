@@ -17,7 +17,6 @@
 	<%
 		boolean isMultipart = ServletFileUpload.isMultipartContent(request);//是否用multipart提交的?
 		if (isMultipart) {
-			
 			FileItemFactory factory = new DiskFileItemFactory();
 			//factory.setSizeThreshold(yourMaxMemorySize);   //设置使用的内存最大值
 			//factory.setRepository(yourTempDirectory);   //设置文件临时目录
