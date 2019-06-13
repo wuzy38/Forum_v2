@@ -49,6 +49,7 @@ String getUserName(String user_id)
 
 %>
 <%
+    request.setCharacterEncoding("utf-8");
     ArrayList<HashMap<String, String>> block_list = getBlockList();
     System.out.println(block_list.size());
     int block_id = getIntVal("block_id", request.getParameter("block_id"), 1, block_list.size());

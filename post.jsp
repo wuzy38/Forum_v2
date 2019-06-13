@@ -47,6 +47,7 @@ int getUserIdByName(String user_name)
 %>
 
 <%
+request.setCharacterEncoding("utf-8");
 ArrayList<HashMap<String, String>> block_list = getBlockList();
 ArrayList<HashMap<String, String>> post_list = getPostList();
 int block_id = getIntVal("block_id", request.getParameter("block_id"), 1, block_list.size());
@@ -88,6 +89,10 @@ String post_content = reply_list.get(0).get("content");
         <link rel="stylesheet" type="text/css" href="css/nav.css" />
         <style>
             /* 主体 */
+            a 
+            {
+                text-decoration: none;
+            }
             .container
             {
                 margin: 50px auto;
@@ -176,6 +181,7 @@ String post_content = reply_list.get(0).get("content");
                 border-radius: 5px;
                 padding: 10px 20px;
                 white-space: pre-wrap;
+                /* text-indent: 2em; */
             }
             .container .reply-box
             {
@@ -284,11 +290,10 @@ String post_content = reply_list.get(0).get("content");
                 <% for (int i = 1; i < reply_list.size(); i++) { %>
                 <div class="reply-item">
                     <div class="reply-head">
-                        <span> <%= i %>楼: <a> <%=getUserName(reply_list.get(i).get("user_id")) %> </a></span>
+                        <span> <%= i %>楼: <a href=""> <%=getUserName(reply_list.get(i).get("user_id")) %> </a></span>
                         <span> 时间: <a> <%= reply_list.get(i).get("reply_time") %> </a> </span>
                     </div>
-                    <div class="reply-body">
-                        <%= reply_list.get(i).get("content") %>
+                    <div class="reply-body"> <%= reply_list.get(i).get("content") %>
                     </div>
                 </div>
                 <% } %>
