@@ -10,6 +10,7 @@ public class MysqlConnector {
     
     public static void main(String[] args) {
         MysqlConnector test = new MysqlConnector();
+        System.out.println(test.getTableData("plate").size());
 //        System.out.println(test.inUserName("user_name999"));
 //        System.out.println(test.checkPassword("user_name999", "password999"));
 //        ArrayList<HashMap<String, String>> res = test.getTableData("user");
@@ -17,17 +18,17 @@ public class MysqlConnector {
 //        	System.out.println(res.get(i).get("user_name"));
 //        }
 
-        List< HashMap<String, String>> a = test.getThemeInOrder(1, 2);
-        for(int i = 0 ; i < a.size(); i++) {
-        	HashMap<String, String> hm = a.get(i);
-        	Iterator<String> it = hm.keySet().iterator();
-            while(it.hasNext()) { // 无序遍历
-    	        String key = it.next();
-    	        String value = hm.get(key); // 根据键值取出值
-    	        System.out.print(value + " ");
-            }
-            System.out.println();
-        }
+//        List< HashMap<String, String>> a = test.getThemeInOrder(1, 2);
+//        for(int i = 0 ; i < a.size(); i++) {
+//        	HashMap<String, String> hm = a.get(i);
+//        	Iterator<String> it = hm.keySet().iterator();
+//            while(it.hasNext()) { // 无序遍历
+//    	        String key = it.next();
+//    	        String value = hm.get(key); // 根据键值取出值
+//    	        System.out.print(value + " ");
+//            }
+//            System.out.println();
+//        }
         
     }
 
@@ -99,7 +100,7 @@ public class MysqlConnector {
     	// test
     	int num = 0;
     	try{
-            String sql = "SELECT max(*) FROM user.user_id";
+            String sql = "SELECT max(user_id) FROM user";
             PreparedStatement pstm = con.prepareStatement(sql);
             ResultSet result = pstm.executeQuery();
             if(result.next())
@@ -123,10 +124,10 @@ public class MysqlConnector {
     	return false;
     }
     
-    public boolean addTheme(String theme_name, int plate_id, int user_id) {
+    public int addTheme(String theme_name, int plate_id, int user_id) {
     	// test
+    	int num = -1;
     	try {
-    		int num = 0;
     		String sql = "select max(theme_id) from theme";
     		PreparedStatement pstm = con.prepareStatement(sql);
             ResultSet result = pstm.executeQuery();
@@ -134,7 +135,7 @@ public class MysqlConnector {
             	num = result.getInt(1) + 1;
             result.close();
             sql = "insert into theme(theme_id, theme_name, theme_time, plate_id, user_id"
-            		+ "click_num, newest_reply, reply_cnt, themecol) VALUES"
+            		+ ", click_num, newest_reply, reply_cnt, themecol) VALUES"
             		+ "(?, ?, ?, ?, ?, ? , ?, ?, ?)";
             pstm = con.prepareStatement(sql);
             pstm.setInt(1, num);
@@ -147,12 +148,13 @@ public class MysqlConnector {
             pstm.setInt(8, 0);
             pstm.setString(9, "");
             int influcenced_row = pstm.executeUpdate();
-            if(influcenced_row > 0) return true;
+            if(influcenced_row > 0) return num;
     	}catch(Exception e) {
     		String msg = e.getMessage();
     		System.out.println(msg);
+    		num = -1;
     	}
-    	return false;
+    	return num;
     }
     
     public boolean addReply(int user_id, String content, int theme_id) {
@@ -196,6 +198,25 @@ public class MysqlConnector {
     			res = result.get(0);
     		}
     	} catch(Exception e) {
+    		String msg = e.getMessage();
+    		System.out.println(msg);
+    	}
+    	return res;
+    }
+    
+    public int getIDbyUsername(String user_name) {
+    	int res = -1;
+    	try {
+    		String sql = "select user_id from user where user_name = ?";
+    		PreparedStatement pstm = con.prepareStatement(sql);
+    		pstm.setString(1, user_name);
+    		ResultSet rs = pstm.executeQuery();		
+    		if(rs.next()) {
+    			res = rs.getInt(1);
+    		}
+    		return res;
+    	}
+    	catch(Exception e) {
     		String msg = e.getMessage();
     		System.out.println(msg);
     	}
