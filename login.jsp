@@ -46,7 +46,7 @@ boolean LoginUser(String userName, String passWord, String submit_type)
         {
             // 设置session
             session.setAttribute("userName", userName);
-            // 重定向->跳转到index.jsp
+            // 重定向->跳转到block.jsp
             response.sendRedirect("block.jsp");
         }
         // else 注册登录错误 -> js处理
