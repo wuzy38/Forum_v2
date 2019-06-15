@@ -73,7 +73,7 @@ String post_title = cur_post.get("theme_name");
 String post_author = getUserName(cur_post.get("user_id"));
 String post_time = cur_post.get("theme_time");
 int click_cnt = Integer.parseInt(cur_post.get("click_num"));
-int reply_cnt = Integer.parseInt(cur_post.get("reply_cnt"));
+int reply_cnt = Integer.parseInt(cur_post.get("reply_cnt"))-1;
 ArrayList<HashMap<String, String>> reply_list = getReplyList(post_id);
 String post_content = reply_list.get(0).get("content");
 

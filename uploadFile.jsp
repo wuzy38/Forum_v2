@@ -37,7 +37,7 @@
 // 						System.out.println("application.getRealPath()=" + application.getRealPath("") );
 // 						System.out.println("System.getProperty(file.separator)=" + System.getProperty("file.separator"));
 // 						System.out.println("FilenameUtils.getName(dfi.getName())=" + FilenameUtils.getName(dfi.getName()));
-						String fileAdd = application.getRealPath("Forum/images/user") 
+						String fileAdd = application.getRealPath("images/user") 
 								+ System.getProperty("file.separator");
 								
 						File uploadDir = new File(fileAdd);
