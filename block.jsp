@@ -61,7 +61,7 @@ String getUserName(String user_id)
     int page_id = getIntVal("page_id", request.getParameter("page_id"), 1, page_cnt);
     HashMap<String, String> cur_block = block_list.get(block_id-1);
     String block_str = cur_block.get("plate_name");
-    int main_post_cnt = Integer.parseInt(cur_block.get("theme_cnt"));
+    int main_post_cnt = post_list.size();
     int reply_post_cnt = getReplyCnt(post_list)-main_post_cnt;      // 帖子的内容是第一个回复
     String block_intro = cur_block.get("introduction");
     String block_open_time = "2019年6月1日";
@@ -304,7 +304,7 @@ String getUserName(String user_id)
         <script>
             block_id = "<%= block_id %>";
             sort_type = "<%= sort_type %>";
-            page_id = "<%= page_id %>";
+            page_id = parseInt("<%= page_id %>");
             function clickBlock(i)
             {
                 if (i == block_id) return;
@@ -322,7 +322,9 @@ String getUserName(String user_id)
             }
             function clickNextPage()
             {
-                if (post_list.size() < page_id * PageSize) return;
+                <% if (post_list.size() < page_id * PageSize){ %>
+                    return;
+                <% } %>
                 window.location.href="block.jsp?block_id="+block_id+"&sort_type="+sort_type+"&page_id="+(page_id+1);
             }
             function clickPrePage()

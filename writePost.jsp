@@ -36,12 +36,6 @@ void addPost(String post_title, String post_content, int block_id, String user_n
         <%-- 导航条css模板 --%>
         <link rel="stylesheet" type="text/css" href="css/nav.css" />
         <style>
-            /* 导航条 当前界面为第3个 */
-            .nav-content .nav-main ul li:nth-of-type(3) a
-            {
-                border-bottom: 4px solid blue;
-                color: #000;
-            }
             .container
             {
                 margin: 50px auto;
@@ -121,6 +115,7 @@ void addPost(String post_title, String post_content, int block_id, String user_n
 
             <div class="main-content">
                 <form action="writePost.jsp" method="POST">
+                    <input type="hidden" name="block_id" value="<%= block_id %>">
                     <div class="post-title">
                         <input name="title" class="title" type="text" placeholder="请输入标题">
                     </div>
