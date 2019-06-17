@@ -17,35 +17,40 @@ int getIntVal(String key_str, String request_str, int from, int to)
     }
     return 1;
 }
-MysqlConnector conn = new MysqlConnector();
+
 ArrayList<HashMap<String, String>> getBlockList()
 {
-    
+    MysqlConnector conn = new MysqlConnector();
     return conn.getTableData("plate");
 }
 
 ArrayList<HashMap<String, String>> getPostList()
 {
+    MysqlConnector conn = new MysqlConnector();
     return conn.getTableData("theme");
 }
 
 ArrayList<HashMap<String, String>> getReplyList(int post_id)
 {
+    MysqlConnector conn = new MysqlConnector();
     return conn.getReplyByThemeID(post_id);
 }
 
 String getUserName(String user_id)
 {
+    MysqlConnector conn = new MysqlConnector();
     return conn.getRowByID("user", Integer.parseInt(user_id) ).get("user_name");
 }
 
 int getUserIdByName(String user_name)
 {
+    MysqlConnector conn = new MysqlConnector();
     return conn.getIDbyUsername(user_name);
 }
 
 void clickPost(int post_id)
 {
+    MysqlConnector conn = new MysqlConnector();
     conn.incClickNum(post_id);
     System.out.println("called");
 }
@@ -61,6 +66,7 @@ int post_id = getIntVal("post_id", request.getParameter("post_id"), 1, post_list
 if (session.getAttribute("userName") != null && request.getParameter("reply_editor") != null)
 {
     System.out.println(request.getParameter("reply_editor"));
+    MysqlConnector conn = new MysqlConnector();
     conn.addReply(getUserIdByName((String)session.getAttribute("userName")), request.getParameter("reply_editor"), post_id);
     post_list = getPostList();
 }

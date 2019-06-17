@@ -2,13 +2,15 @@
 contentType="text/html; charset=utf-8"%>
 
 <%!
-MysqlConnector conn = new MysqlConnector();
+
 ArrayList<HashMap<String, String>> getPostList()
 {
+    MysqlConnector conn = new MysqlConnector();
     return conn.getThemeInOrder(-1, 3);
 }
 String getUserName(String user_id)
 {
+    MysqlConnector conn = new MysqlConnector();
     return conn.getRowByID("user", Integer.parseInt(user_id) ).get("user_name");
 }
 %>
@@ -78,7 +80,6 @@ String getUserName(String user_id)
         <script>
             function clickPost(block_id, post_id)
             {
-                alert(post_id);
                 window.location.href="post.jsp?block_id="+block_id+"&post_id="+post_id;
             }
             function clickUser(user_id)

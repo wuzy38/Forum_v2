@@ -21,14 +21,15 @@ int getIntVal(String key_str, String request_str, int from, int to)
 
 // 一页的帖子数
 int PageSize = 10;
-MysqlConnector conn = new MysqlConnector();
 ArrayList<HashMap<String, String>> getBlockList()
 {
+    MysqlConnector conn = new MysqlConnector();
     return conn.getTableData("plate");
 }
 
 ArrayList<HashMap<String, String>> getPostList(int block_id, int sort_type)
 {
+    MysqlConnector conn = new MysqlConnector();
     return conn.getThemeInOrder(block_id, sort_type);
 }
 
@@ -44,6 +45,7 @@ int getReplyCnt(ArrayList<HashMap<String, String>> post_list)
 
 String getUserName(String user_id)
 {
+    MysqlConnector conn = new MysqlConnector();
     return conn.getRowByID("user", Integer.parseInt(user_id) ).get("user_name");
 }
 

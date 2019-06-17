@@ -2,13 +2,14 @@
 contentType="text/html; charset=utf-8"%>
 
 <%!
-MysqlConnector conn = new MysqlConnector();
 ArrayList<HashMap<String, String>> getPostList(String search_key)
 {
+    MysqlConnector conn = new MysqlConnector();
     return conn.getThemeByContent(search_key);
 }
 String getUserName(String user_id)
 {
+    MysqlConnector conn = new MysqlConnector();
     return conn.getRowByID("user", Integer.parseInt(user_id) ).get("user_name");
 }
 %>
