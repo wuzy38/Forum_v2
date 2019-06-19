@@ -118,9 +118,15 @@ boolean LoginUser(String userName, String passWord, String submit_type)
             /* .header .header-wrapper .lg-sel { color:mediumblue; } */
             .form-wrapper
             {
-                padding-top: 150px; 
+                 
                 width:750px;
-                margin: auto;
+                margin: 0 auto;
+            }
+            .form-wrapper form
+            {
+                padding-top: 150px;
+                width:750px;
+                margin: 0 auto;
             }
             .form-item 
             { 
