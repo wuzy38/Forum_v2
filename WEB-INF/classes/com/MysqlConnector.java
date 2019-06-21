@@ -29,17 +29,20 @@ public class MysqlConnector {
 //            }
 //            System.out.println();
 //        }
-        
+        System.out.println(test.getTableData("plate").size());
+        System.out.println(test.getThemeInOrder(-1, 3).size());
+        test.incClickNum(1);
     }
 
     public MysqlConnector() {
-        String connStr = "jdbc:mysql://172.18.35.138:3306/forum?serverTimezone=GMT"
-                + "&useUnicode=true&characterEncoding=utf-8";
-        
+//        String connStr = "jdbc:mysql://172.18.35.138:3306/forum?serverTimezone=GMT"
+//                + "&useUnicode=true&characterEncoding=utf-8";
+      String connStr = "jdbc:mysql://172.18.187.10:3306/16337254_forum?serverTimezone=GMT"
+      + "&useUnicode=true&characterEncoding=utf-8";
         con = null;
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver"); // 数据库驱动
-            con = DriverManager.getConnection(connStr, "root", "88720073");
+            Class.forName("com.mysql.jdbc.Driver"); // 数据库驱动
+            con = DriverManager.getConnection(connStr, "user", "123");
         } catch (Exception e) {
             String msg = e.getMessage();
             System.out.println(msg);
@@ -236,9 +239,15 @@ public class MysqlConnector {
     	}
     	ArrayList<HashMap<String, String>> result = new ArrayList<HashMap<String, String>>();
     	try {
-    		String sql = "select * from theme where plate_id = ? order by "+ order;
+    		String tmp = "where plate_id = ?";
+    		if(plate_id <= 0) {
+    			tmp = " ";
+    		}
+    		String sql = "select * from theme "+ tmp + " order by "+ order;
     		PreparedStatement pstm = con.prepareStatement(sql);
-    		pstm.setInt(1, plate_id);
+    		if(plate_id > 0) {
+    			pstm.setInt(1, plate_id);
+    		}
     		ResultSet rs = pstm.executeQuery();
     		result = convertToList(rs);
     	} catch(Exception e) {
@@ -263,12 +272,43 @@ public class MysqlConnector {
     	return result;
     }
     
+    
+    public ArrayList<HashMap<String, String>> getThemeByContent(String content){
+    	ArrayList<HashMap<String, String>> result = new ArrayList<HashMap<String, String>>();
+    	try {
+    		String sql = "select * from theme where theme_name like ?";
+    		PreparedStatement pstm = con.prepareStatement(sql);
+    		pstm.setString(1, "%" + content + "%" );
+    		ResultSet rs = pstm.executeQuery();
+    		result = convertToList(rs);
+    	}catch(Exception e) {
+    		String msg = e.getMessage();
+    		System.out.println(msg);
+    	}
+    	return result;
+    }
+    
+    public void incClickNum(int theme_id) {
+    	try {
+    		String sql = "update theme set click_num = click_num + 1 where theme_id = ?";
+    		PreparedStatement pstm = con.prepareStatement(sql);
+    		pstm.setInt(1, theme_id);
+    		pstm.executeUpdate();
+    	}catch(Exception e) {
+    		String msg = e.getMessage();
+    		System.out.println(msg);
+    	}
+    	return;
+    }
+    
+    
     private String getTimeString() {
     	Date date = new Date(); 
         Timestamp time = new Timestamp(date.getTime());
         String time_str = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(time);
         return time_str;
     }
+    
     
     private static ArrayList<HashMap<String, String>> convertToList(ResultSet rs) throws Exception {
     	ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
